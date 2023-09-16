@@ -1,0 +1,75 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@300&family=Noto+Sans+Vithkuqi:wght@700&display=swap');
+
+.main{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    height: 100%;
+    background: #ffffff;
+}
+.menu{
+  position:fixed;
+  background: #ffffff;
+  width: 26vw;
+  height: 100vh;
+  z-index: 9999;
+}
+.menu-bar{
+  position: absolute;
+  top: 2.5%;
+  left: 5%;
+  width: 22px;
+  height: 22px;
+  background-size: contain;
+}
+.search{
+  position: absolute;
+  background: white;
+  height: 46px;
+  border-radius: 3px;
+  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  outline: none;
+  border: none;
+  font-size: 1.23rem;
+
+}
+.nav{
+  background: #258fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 180px;
+}
+
+
+
+#map{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+    border: 2px solid black;
+}
+.search1{
+  position: absolute;
+  left: 20%;
+}
+.search2{
+  position: absolute;
+  left: 70%;
+}
+.dis{
+  position: absolute;
+  left: 20%;
+  z-index: 9999;
+}
+#calculateButton{
+  position: absolute;
+  top: 50%;
+}
+.distance{
+  position: absolute;
+  left: 20%;
+}
