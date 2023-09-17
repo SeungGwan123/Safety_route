@@ -17,6 +17,7 @@ function Main() {
     script.type = "text/javascript";
     script.async = "async";
     document.head.appendChild(script);
+    console.log("hello")
     
   }, []);
   return (
