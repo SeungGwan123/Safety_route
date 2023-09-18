@@ -9,13 +9,6 @@
     height: 100%;
     background: #ffffff;
 }
-.menu{
-  position:fixed;
-  background: #ffffff;
-  width: 26vw;
-  height: 100vh;
-  z-index: 9999;
-}
 .menu-bar{
   position: absolute;
   top: 2.5%;
@@ -23,53 +16,113 @@
   width: 22px;
   height: 22px;
   background-size: contain;
+  background-image: url(../img/menu-bar.svg);
+  z-index: 99999;
 }
-.search{
-  position: absolute;
-  background: white;
-  height: 46px;
-  border-radius: 3px;
-  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
-  outline: none;
-  border: none;
-  font-size: 1.23rem;
+.menu {
+  position: fixed;
+  background: #ffffff;
+  width: 26vw;
+  height: 100vh;
+  z-index: 9999;
+  top: 0; /* Add this property to align it to the top */
+  left: 4%; /* Add this property to align it to the left */
+}
+.menu-bar{
+  position: fixed;
+  width: 4%;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
 
+  align-items: center;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  border-right: solid 0.5px rgba(0, 0, 0, 0.15);
 }
-.nav{
-  background: #258fff;
+.logo{
+  position: relative;
+  list-style: none;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 180px;
+  width: 62px;
+  height: 70px;
+}
+.menu-button{
+  position: relative;
+  width: 62px;
+  display: flex;
+  list-style: none;
+  justify-content: center;
+  align-items: center;
+  height: 62px;
+}
+.menu-button :hover{
+  color: #258fff;
+}
+
+.nav {
+  position: fixed;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 26vw;
+  height: 22vh;
+  top: 0; /* Add this property to align it to the top */
+  left: 4%; /* Add this property to align it to the left */
 }
 
 
 
-#map{
+.input-address{
   position: absolute;
-  width: 100vw;
-  height: 100vh;
-    border: 2px solid black;
+  width: 350px;
+  height: 46px;
+  border-radius: 3px;
+  background-color: #fff;
+  -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  outline: none; /* Remove the outline */
+  border: 2px solid #258fff; /* Remove the border */
+  top: 4vh;
 }
-.search1{
-  position: absolute;
-  left: 20%;
+.start{
+  visibility: hidden;
+  width: 232px;
+  height: 20%;
+
 }
-.search2{
-  position: absolute;
-  left: 70%;
+.end{
+  width: 232px;
+  height: 20%;
+  visibility: hidden;
 }
-.dis{
-  position: absolute;
-  left: 20%;
-  z-index: 9999;
+.route-button{
+  visibility: hidden;
+  width: 20%;
 }
-#calculateButton{
-  position: absolute;
-  top: 50%;
+.stop{
+  visibility: hidden;
 }
-.distance{
-  position: absolute;
-  left: 20%;
+.Search{
+position: absolute;
+top: 5vh;
+right: 10%;
+  background-image: url(../img/ico_search21x212.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  float: left;
+    width: 20px;
+    height: 20px;
+    margin: 5px 0;
+    border: 0 none;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+    cursor: pointer;
 }
