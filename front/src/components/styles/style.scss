@@ -92,7 +92,6 @@
   top: 4vh;
 }
 .start{
-  visibility: hidden;
   width: 232px;
   height: 20%;
 
@@ -100,14 +99,9 @@
 .end{
   width: 232px;
   height: 20%;
-  visibility: hidden;
 }
 .route-button{
-  visibility: hidden;
   width: 20%;
-}
-.stop{
-  visibility: hidden;
 }
 .Search{
 position: absolute;
@@ -125,4 +119,7 @@ right: 10%;
     line-height: 0;
     text-indent: -9999px;
     cursor: pointer;
+}
+.direction-tab{
+  color: #258fff;
 }
