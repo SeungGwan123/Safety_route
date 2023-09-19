@@ -26,7 +26,6 @@ function Main() {
   <Link className='menu-button' style={{background:"#258fff", color:"#fff"}} to="/">검색</Link>
   <Link className='menu-button' to="/direction">길찾기</Link>
   <Link className='menu-button' to="/cctv">CCTV</Link>
-  
  
 </div>
 <div className="menu">
@@ -34,7 +33,7 @@ function Main() {
      
         <input className='input-address'
           type="text"
-          placeholder="주소를 입력하세요"
+          placeholder="주소를 입력하세요!"
         />
         <div className='Search' ></div>
         </div>
