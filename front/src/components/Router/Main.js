@@ -7,6 +7,9 @@ import "../styles/style.scss";
 import axios from "axios";
 
 function Main() {
+  // axios.get("http://127.0.0.1:5000/route/v1/driving/127.092088,37.335339;127.085124,37.337822?steps=true").then(function (res){
+  //   console.log(res.data)
+  // })
   const addressCoordinates = {
     '아카데미로 119': { lat: 37.375924147295455, lng: 126.63285162967031 }, // Replace with your own dataset
     '송도 타임스페이스': { lat: 37.38308798021501, lng: 126.64251548843 },
