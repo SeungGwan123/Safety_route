@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Circle } from 'react-leaflet';
 import L from "leaflet";
 import { Link } from 'react-router-dom';
 import "leaflet/dist/leaflet.css";
@@ -63,7 +63,7 @@ function CCTV() {
   const cctvIcon = new L.Icon({
     iconUrl: require("../img/cctv.png"), // 이미지 경로를 올바르게 지정하세요.
     iconSize: [15, 20],
-    iconAnchor: [12, 24],
+    iconAnchor: [16, 21],
   });
   return (
     <div className='main'>
@@ -80,7 +80,12 @@ function CCTV() {
         {cctvCoordinates.map((coordinates, index) => (
   <Marker key={index} position={coordinates} icon={cctvIcon}>
     <Popup>
-      A pretty CSS3 popup. <br /> Easily customizable.
+    관리기관명: 서울특별시 종로구청<br/>
+    소재지도로명주소: 새문안로 55 경희궁공원 쉼터<br/>
+    소재지지번주소: "신문로2가 2-1, 흥화문 근처 쉼터<br/>
+    설치목적구분: 생활방범<br/>
+    카메라대수: 1, <br /> 
+    촬영방면정보: 360도전방면
     </Popup>  
   </Marker>
 ))}

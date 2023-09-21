@@ -48,7 +48,9 @@ function Main() {
         />
         <Marker position={markerPosition} icon={customIcon}>
           <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+            여기는 서울입니다 <br /> 위도:37.5665 경도:126.9780 <br/>도로명: 서울 중구 세종대로 110 서울특별시청<br/>
+            지번: 태평로1가 31<br/>
+            우편번호: 04524
           </Popup>  
         </Marker>
       </MapContainer>
