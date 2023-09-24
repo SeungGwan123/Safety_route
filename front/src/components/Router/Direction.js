@@ -3,6 +3,8 @@ import React, { useEffect,useState, useRef } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, Polyline } from 'react-leaflet';
 import { Link } from 'react-router-dom';
 import L from "leaflet";
+import axios from 'axios'
+import { decode } from '@mapbox/polyline';
 
 function Direction(){
   const customIcon = new L.Icon({
@@ -11,17 +13,31 @@ function Direction(){
     iconAnchor: [12, 24],
   });
   const mapRef=useRef();
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  useEffect(() => {
+    async function fetchRouteData() {
+      try {
+        const response = await axios.get('http://127.0.0.1:5000/route/v1/driving/126.63486162967031,37.376924147295455;126.64251548843,37.38308798021501?steps=true');
+        if (response.data && response.data.routes && response.data.routes.length > 0) {
+          const geometry = response.data.routes[0].geometry;
+          const coordinates = decodePolyline(geometry);
+          setRouteCoordinates(coordinates);
+        } else {
+          console.error('No valid route data found.');
+        }
+      } catch (error) {
+        console.error('Error fetching route data:', error);
+      }
+    }
 
-    
-    const routeCoordinates = [
-      [37.375924147295455, 126.63285162967031],// stat
-      [37.375267693564034, 126.63386483634098 ],
-      [37.37589977074078, 126.63285128726395 ],
-      [37.37729096662433,126.63256788988336],
-      [37.3792774922298,126.6324960993986],
-      [37.385990453708146,126.63993847972792],
-      [37.38308798021501, 126.64251548843]//end
-    ];
+    fetchRouteData();
+  }, []);
+
+  // Helper function to decode polyline
+  function decodePolyline(encoded) {
+    const decoded = decode(encoded, { precision: 5 });
+    return decoded.map(coord => ({ lat: coord[0], lng: coord[1] }));
+  }
 
 
   return (
@@ -36,7 +52,7 @@ function Direction(){
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>  
         </Marker>
-        <Polyline positions={routeCoordinates} color="#258fff"/>
+        <Polyline positions={routeCoordinates} color="#258fff" />
       </MapContainer>
       <div className='menu-bar'>
       <Link className='logo'>로고</Link>
