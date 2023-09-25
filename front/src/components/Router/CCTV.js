@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, Circle } from 'react-leaflet';
 import L from "leaflet";
 import { Link } from 'react-router-dom';
@@ -7,53 +7,93 @@ import "../styles/style.scss";
 import axios from "axios";
 
 function CCTV() {
-  const addressCoordinates = {
-    '아카데미로 119': { lat: 37.375924147295455, lng: 126.63285162967031 }, // Replace with your own dataset
-    '송도 타임스페이스': { lat: 37.38308798021501, lng: 126.64251548843 },
-    '서울':{ lat: 37.5665, lng: 126.9780 }
-    // Add more addresses and coordinates as needed
-  };
-  const cctvCoordinates=[
-    [37.570864,127.003371],
-    [37.570881,127.004878],
-    [37.571567,127.010944],
-    [37.571653,127.01308],
+  // const addressCoordinates = {
+  //   '아카데미로 119': { lat: 37.375924147295455, lng: 126.63285162967031 }, // Replace with your own dataset
+  //   '송도 타임스페이스': { lat: 37.38308798021501, lng: 126.64251548843 },
+  //   '서울':{ lat: 37.5665, lng: 126.9780 }
+  //   // Add more addresses and coordinates as needed
+  // };
+//   const cctvCoordinates=[
+//     [37.570864,127.003371],
+//     [37.570881,127.004878],
+//     [37.571567,127.010944],
+//     [37.571653,127.01308],
 
-    [37.581843,127.002123],//16
-    [37.570764,126.975918],
-    [37.585041,126.982137],
-    [37.576877,127.002369],
+//     [37.581843,127.002123],//16
+//     [37.570764,126.975918],
+//     [37.585041,126.982137],
+//     [37.576877,127.002369],
 
-    [37.5835,127.002609],//25
-    [37.582667,127.003884],
-    [37.572498,126.991473],
-    [37.57142,126.980701],
+//     [37.5835,127.002609],//25
+//     [37.582667,127.003884],
+//     [37.572498,126.991473],
+//     [37.57142,126.980701],
 
-    [37.583035,126.998637],//31
-    [37.569998,126.975498],
-    [37.572226,127.013539],
-    [37.574936,126.967743]
+//     [37.583035,126.998637],//31
+//     [37.569998,126.975498],
+//     [37.572226,127.013539],
+//     [37.574936,126.967743]
 
-]
+// ]
 
   const [address, setAddress] = useState("");
+  const [userLocation, setUserLocation] = useState(null);
   const [markerPosition, setMarkerPosition] = useState([37.5665, 126.9780]);
   const mapRef = useRef();
+  const [cctvData, setCCTVData] = useState([]);
+  const [filteredCCTVData, setFilteredCCTVData] = useState([]);
 
-  const searchAddress = () => {
-    const coordinates = addressCoordinates[address];
 
-    if (coordinates) {
-      const { lat, lng } = coordinates;
-      if (mapRef.current) {
-        // Set the view of the TileLayer (OSM) to the new coordinates
-        mapRef.current.setView([lat, lng], 15);
-        setMarkerPosition([lat, lng]);
+ 
+  useEffect(() => {
+  //axios로 백엔드 cctv 가져왔습니다
+    axios.get('http://localhost:3001/cctv') // 백엔드 cctv 경로
+      .then((response) => {
+        const cctvData = response.data;
+        setCCTVData(cctvData);
+      })
+      .catch((error) => {
+        console.error("Error fetching CCTV data:", error);
+      });
+    
+     //현재 재위치 일단 서울시청으로 박아둠
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation([37.5665, 126.9780]);
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
       }
-    } else {
-      console.error("Address not found in the dataset.");
+    );
+  }, []);
+  const radius = 1000; //반지름 반경을 1000으로
+  useEffect(() => {
+     //cctv 위치
+    if (userLocation) {
+      const filteredMarkers = cctvData.filter((cctv) => {
+        const cctvCoords = [parseFloat(cctv["WGS84위도"]), parseFloat(cctv["WGS84경도"])];
+        const distance = L.latLng(userLocation).distanceTo(cctvCoords);
+        return distance <= radius;
+      });
+      setFilteredCCTVData(filteredMarkers);
     }
-  }
+  }, [userLocation, cctvData, radius]);
+  
+
+  // const searchAddress = () => {
+  //   const coordinates = addressCoordinates[address];
+
+  //   if (coordinates) {
+  //     const { lat, lng } = coordinates;
+  //     if (mapRef.current) {
+  //       // Set the view of the TileLayer (OSM) to the new coordinates
+  //       mapRef.current.setView([lat, lng], 15);
+  //       setMarkerPosition([lat, lng]);
+  //     }
+  //   } else {
+  //     console.error("Address not found in the dataset.");
+  //   }
+  // }
 
   const customIcon = new L.Icon({
     iconUrl: require("../img/search.png"), // 이미지 경로를 올바르게 지정하세요.
@@ -77,16 +117,17 @@ function CCTV() {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>  
         </Marker>
-        {cctvCoordinates.map((coordinates, index) => (
-  <Marker key={index} position={coordinates} icon={cctvIcon}>
+        {filteredCCTVData.map((cctv, index) => (
+  <Marker key={index} position={[parseFloat(cctv["WGS84위도"]), parseFloat(cctv["WGS84경도"])]} icon={cctvIcon}>
     <Popup>
-    관리기관명: 서울특별시 종로구청<br/>
-    소재지도로명주소: 새문안로 55 경희궁공원 쉼터<br/>
-    소재지지번주소: "신문로2가 2-1, 흥화문 근처 쉼터<br/>
-    설치목적구분: 생활방범<br/>
-    카메라대수: 1, <br /> 
-    촬영방면정보: 360도전방면
-    </Popup>  
+      관리기관명: {cctv["관리기관명"]}<br/>
+      소재지도로명주소: {cctv["소재지도로명주소"]}<br/>
+      설치목적구분: {cctv["설치목적구분"]}<br/>
+      카메라대수: {cctv["카메라대수"]}<br/>
+      설치연월: {cctv["설치연월"]}<br/>
+      관리기관전화번호: {cctv["관리기관전화번호"]}<br/>
+      데이터기준일자: {cctv["데이터기준일자"]}<br/>
+    </Popup>
   </Marker>
 ))}
 
@@ -106,7 +147,7 @@ function CCTV() {
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
-          <div className='Search' onClick={searchAddress}></div>
+          {/* <div className='Search' onClick={searchAddress}></div> */}
         </div>
       </div>
     </div>
