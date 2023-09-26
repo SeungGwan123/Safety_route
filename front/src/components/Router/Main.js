@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import L from "leaflet";
 import { Link } from 'react-router-dom';
@@ -10,6 +10,8 @@ function Main() {
   // axios.get("http://127.0.0.1:5000/route/v1/driving/127.092088,37.335339;127.085124,37.337822?steps=true").then(function (res){
   //   console.log(res.data)
   // })
+  
+
   const addressCoordinates = {
     '아카데미로 119': { lat: 37.375924147295455, lng: 126.63285162967031 }, // Replace with your own dataset
     '송도 타임스페이스': { lat: 37.38308798021501, lng: 126.64251548843 },
@@ -44,6 +46,7 @@ function Main() {
 
   return (
     <div className='main'>
+      <div className='login'>로그인</div>
       <MapContainer center={[37.5665, 126.9780]} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

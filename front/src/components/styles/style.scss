@@ -9,6 +9,36 @@
     height: 100%;
     background: #ffffff;
 }
+.login{
+  position: fixed;
+  top: 2.5%;
+  right: 2.5vw;
+  width:65px;
+  height: 20px;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border: 1px rgb(196, 194, 194) solid;
+  border-radius: 3px;
+  font-weight: bold;
+  color: #258fff;
+  font-size: 0.75rem;
+  gap: 3px;
+  
+}
+.login:hover{
+  color: #6aa4e3;
+}
+// .login-circle{
+//   background: linear-gradient(57deg,#9aefd5,#50cba0);
+//   width: 20px;
+//   height: 20px;
+//   border-radius: 50%;
+//   z-index: 99999;
+//   font-family: 'Noto Sans Vithkuqi', sans-serif;
+// }
 .menu-bar{
   position: absolute;
   top: 2.5%;
