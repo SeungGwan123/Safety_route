@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import "leaflet/dist/leaflet.css";
 import "../styles/style.scss";
 import axios from "axios";
+import routeImage from "../img/route.svg";
+import homeImage from "../img/home.svg";
+import cctvImage from "../img/cctv.svg";
 
 function CCTV() {
   // const addressCoordinates = {
@@ -134,9 +137,18 @@ function CCTV() {
       </MapContainer>
       <div className='menu-bar'>
       <Link className='logo'>로고</Link>
-      <Link className='menu-button'  to="/">검색</Link>
-      <Link className='menu-button' to="/direction">길찾기</Link>
-      <Link className='menu-button' style={{background:"#258fff", color:"#fff"}} to="/cctv">CCTV</Link>
+      <Link className='menu-button'  to="/"><div className="menu-button-content">
+        <img src={homeImage} alt="Route" />
+        <span>검색</span>
+      </div></Link>
+      <Link className='menu-button' to="/direction"><div className="menu-button-content">
+        <img src={routeImage} alt="Route" />
+        <span>길찾기</span>
+      </div></Link>
+      <Link className='menu-button' style={{background:"#258fff", color:"#fff"}} to="/cctv"><div className="menu-button-content">
+        <img src={cctvImage} alt="Route" />
+        <span>CCTV</span>
+      </div></Link>
       </div>
       <div className="menu">
         <div className='nav'>
