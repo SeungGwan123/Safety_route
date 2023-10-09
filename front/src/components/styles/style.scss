@@ -160,6 +160,17 @@ right: 10%;
     text-indent: -9999px;
     cursor: pointer;
 }
+.weather{
+  position: fixed;
+  top:15%;
+  width: 25.9%;
+  left: 4%;
+  height: 25%;
+  z-index: 999999;
+  border: 1px solid rgb(196, 194, 194);
+  color: black;
+
+}
 .direction-tab{
   color: #258fff;
 }

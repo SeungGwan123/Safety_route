@@ -9,12 +9,51 @@ import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
 
+
 function Main() {
   const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
+  const OpenWeather_Base_Url = "https://api.openweathermap.org/data/2.5/weather";
+  const OpenWeather_API_Key = "d5adc8ce05e9e4cd506e8886305da11e";
 
   const [address, setAddress] = useState("");
-  const [markerPosition, setMarkerPosition] = useState([37.5665, 126.9780]);
+  const [markerPosition, setMarkerPosition] = useState([37.5665, 126.97]);
+  const [weatherData, setWeatherData] = useState(null);
   const mapRef = useRef();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setMarkerPosition([latitude, longitude]);
+        fetchWeatherData(latitude, longitude);
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 15);
+        }
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+  }, []);
+
+  const fetchWeatherData = async (lat, lon) => {
+    try {
+      const weatherResponse = await axios.get(OpenWeather_Base_Url, {
+        params: {
+          lat,
+          lon,
+          appid: OpenWeather_API_Key,
+          units: 'metric', // Use metric units for temperature
+        },
+      });
+  
+      console.log('Weather Data:', weatherResponse.data); // Add this line to check the response
+  
+      setWeatherData(weatherResponse.data);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  };
 
   const searchAddress = async () => {
     try {
@@ -40,6 +79,22 @@ function Main() {
     }
   };
 
+  const renderWeather = () => {
+    if (weatherData) {
+      const { main, weather } = weatherData;
+      return (
+        <div className='weather'>
+          <p>날씨</p>
+          <p>현재위치: {weatherData.name}</p>
+          <p>온도: {main.temp} °C</p>
+          <p>날씨: {weather[0].description}</p>
+          <p>습기: {main.humidity}%</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const customIcon = new L.Icon({
     iconUrl: require("../img/search.png"), // 이미지 경로를 올바르게 지정하세요.
     iconSize: [20, 24],
@@ -48,8 +103,16 @@ function Main() {
 
   return (
     <div className='main'>
+       <div className='weather'>
+          <p>날씨</p>
+          <p>현재위치: </p>
+          <p>온도: </p>
+          <p>날씨:</p>
+          <p>습기:</p>
+        </div>
+      {renderWeather()}
       <div className='login'>로그인</div>
-      <MapContainer center={[37.5665, 126.9780]} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
+      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -92,9 +155,12 @@ function Main() {
             }}
           />
           <div className='Search' onClick={searchAddress}></div>
+          
         </div>
       </div>
+      
     </div>
+    
   )
 }
 
