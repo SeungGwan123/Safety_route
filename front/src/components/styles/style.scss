@@ -160,17 +160,30 @@ right: 10%;
     text-indent: -9999px;
     cursor: pointer;
 }
-.weather{
+.weather {
   position: fixed;
-  top:15%;
+  display: flex;
+  top: 15%;
   width: 25.9%;
   left: 4%;
   height: 25%;
   z-index: 999999;
-  border: 1px solid rgb(196, 194, 194);
-  color: black;
-
+  border: 1px solid #258fff;
+  background-color: #fff; /* Add a white background color */
+  color: #333; /* Darken the text color */
+  font-size: 1rem; /* Increase the font size for better readability */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+  border-radius: 10px; /* Add rounded corners */
 }
+
+.weather p {
+  margin: 0; /* Remove default margin for paragraphs */
+  padding: 5px; /* Add some padding to the paragraphs */
+}
+
 .direction-tab{
   color: #258fff;
 }

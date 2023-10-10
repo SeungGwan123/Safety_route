@@ -13,7 +13,7 @@ import cctvImage from "../img/cctv.svg";
 function Main() {
   const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
   const OpenWeather_Base_Url = "https://api.openweathermap.org/data/2.5/weather";
-  const OpenWeather_API_Key = "d5adc8ce05e9e4cd506e8886305da11e";
+  const OpenWeather_API_Key = "52d23d591c1d87740c8f298e811a8d8f";
 
   const [address, setAddress] = useState("");
   const [markerPosition, setMarkerPosition] = useState([37.5665, 126.97]);
@@ -84,12 +84,12 @@ function Main() {
       const { main, weather } = weatherData;
       return (
         <div className='weather'>
-          <p>날씨</p>
-          <p>현재위치: {weatherData.name}</p>
-          <p>온도: {main.temp} °C</p>
-          <p>날씨: {weather[0].description}</p>
-          <p>습기: {main.humidity}%</p>
-        </div>
+        <h2>날씨 정보</h2>
+        <p>현재 위치: {weatherData.name}</p>
+        <p>온도: {main.temp} °C</p>
+        <p>날씨: {weather[0].description}</p>
+        <p>습기: {main.humidity}%</p>
+      </div>
       );
     }
     return null;
@@ -103,13 +103,13 @@ function Main() {
 
   return (
     <div className='main'>
-       <div className='weather'>
+       {/* <div className='weather'>
           <p>날씨</p>
           <p>현재위치: </p>
           <p>온도: </p>
           <p>날씨:</p>
           <p>습기:</p>
-        </div>
+        </div> */}
       {renderWeather()}
       <div className='login'>로그인</div>
       <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
