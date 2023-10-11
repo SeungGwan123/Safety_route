@@ -8,6 +8,7 @@ import { decode } from '@mapbox/polyline';
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
+const Nominatim_Base_Url = 'https://nominatim.openstreetmap.org/search';
 
 function Direction() {
   const [address, setAddress] = useState("");
@@ -17,6 +18,11 @@ function Direction() {
   const [filteredCCTVData, setFilteredCCTVData] = useState([]);
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [cctvCircles, setCCTVCircles] = useState([]);
+  const [osrmPolyline, setOsrmPolyline] = useState('');
+  const [startLocationQuery, setStartLocationQuery] = useState('');
+  const [endLocationQuery, setEndLocationQuery] = useState('');
+  const [startLocation, setStartLocation] = useState(null);
+  const [endLocation, setEndLocation] = useState(null);
 
   useEffect(() => {
     //axios로 백엔드 cctv 가져왔습니다
@@ -68,70 +74,83 @@ function Direction() {
 
   const mapRef = useRef();
 
-  useEffect(() => {
-    async function fetchRouteData() {
-      try {
-        const response = await axios.get('http://127.0.0.1:5000/route/v1/foot/126.9780,37.5665;126.9829812177374,37.569374723904296?alternatives=3&steps=true');
-        if (response.data && response.data.routes && response.data.routes.length > 0) {
-          const routeData = response.data.routes.slice(0, 3); // Get the first 3 alternative routes
-          const coordinates = routeData.map(route => decodePolyline(route.geometry));
-          setRouteCoordinates(coordinates);
+  async function fetchRouteData() {
+    try {
+        const requestData = {
+           
+        };
+
+        const response = await axios.post(
+            'http://localhost:8080/Safety_route/walking',
+            requestData,
+            {
+                headers: {
+                    'Content-Type': 'application/json', // Set the content type
+                },
+            }
+        );
+
+        if (response.data && response.data.code === 1) {
+            const data = JSON.parse(response.data.data);
+            if (data.routes && data.routes.length > 0) {
+                const osrmPolyline = data.routes[0].geometry;
+                return osrmPolyline;
+            } else {
+                console.error('No valid route data found.');
+                return null;
+            }
         } else {
-          console.error('No valid route data found.');
+            console.error('No valid route data found.');
+            return null;
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching route data:', error);
+        return null;
+    }
+}
+const fetchLocationCoordinates = async (query) => {
+  try {
+    const response = await axios.get(Nominatim_Base_Url, {
+      params: {
+        q: query,
+        format: 'json',
+      },
+    });
+
+    if (response.data && response.data.length > 0) {
+      const location = response.data[0];
+      return { lat: parseFloat(location.lat), lon: parseFloat(location.lon) };
+    } else {
+      console.error('No location data found for the query.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching location data:', error);
+    return null;
+  }
+};
+  
+  useEffect(() => {
+    async function fetchData() {
+      const osrmPolyline = await fetchRouteData();
+      console.log('osrmPolyline:', osrmPolyline); // 로깅
+      if (osrmPolyline && osrmPolyline.length > 0) {
+        const decodedCoordinates = decode(osrmPolyline, { precision: 5 });
+        setRouteCoordinates(decodedCoordinates); // Set the decoded coordinates
+      } else {
+        console.error('Invalid osrmPolyline data');
       }
     }
 
-    fetchRouteData();
+    fetchData();
   }, []);
-
-  //decode
-  function decodePolyline(encoded) {
-    const decoded = decode(encoded, { precision: 5 });
-    return decoded.map(coord => ({ lat: coord[0], lng: coord[1] }));
-  }
-
-  const calculateBoundingBox = (routeCoordinates) => {
-    const bounds = L.latLngBounds();
-    routeCoordinates.forEach((coord) => {
-      bounds.extend(coord);
-    });
-    return bounds;
-  };
-
-  // Function to filter CCTV markers within the bounding box
-  const filterCCTVsInBoundingBox = (cctvData, boundingBox) => {
-    return cctvData.filter((cctv) => {
-      const cctvCoords = [parseFloat(cctv['WGS84위도']), parseFloat(cctv['WGS84경도'])];
-      return boundingBox.contains(L.latLng(cctvCoords));
-    });
-  };
+  const decodedCoordinates = decode(osrmPolyline, { precision: 5 });
   
-  // Calculate the bounding box for the route
-  const routeBoundingBox = calculateBoundingBox(routeCoordinates);
+  
 
-  // Filter CCTV markers within the bounding box
-  const nearbyCCTVs = filterCCTVsInBoundingBox(cctvData, routeBoundingBox);
 
-  // Calculate circles for nearby CCTV markers
-  useEffect(() => {
-    const circles = nearbyCCTVs.map((cctv, index) => {
-      const cctvCoords = [parseFloat(cctv['WGS84위도']), parseFloat(cctv['WGS84경도'])];
-      return (
-        <Circle
-          key={index}
-          center={cctvCoords}
-          radius={20} // Set the desired radius of the circle
-          fillColor="red" // Set the fill color of the circle
-          fillOpacity={0.5} // Set the fill opacity of the circle
-        />
-      );
-    });
 
-    setCCTVCircles(circles);
-  }, [nearbyCCTVs]);
+ 
 
   return (
     <div className='main'>
@@ -145,38 +164,12 @@ function Direction() {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
-        
-        {routeCoordinates.map((coordinates, routeIndex) => (
-          <Polyline key={routeIndex} positions={coordinates} color='#258fff' />
-        ))}
-
-        {nearbyCCTVs.map((cctv, index) => (
-          <Marker key={index} position={[parseFloat(cctv['WGS84위도']), parseFloat(cctv['WGS84경도'])]} icon={cctvIcon}>
-            <Popup>
-              관리기관명: {cctv['관리기관명']}<br />
-              소재지도로명주소: {cctv['소재지도로명주소']}<br />
-              설치목적구분: {cctv['설치목적구분']}<br />
-              카메라대수: {cctv['카메라대수']}<br />
-              설치연월: {cctv['설치연월']}<br />
-              관리기관전화번호: {cctv['관리기관전화번호']}<br />
-              데이터기준일자: {cctv['데이터기준일자']}<br />
-            </Popup>
-          </Marker>
-        ))}
-
-        {filteredCCTVData.map((cctv, index) => (
-          <Marker key={index} position={[parseFloat(cctv['WGS84위도']), parseFloat(cctv['WGS84경도'])]} icon={cctvIcon}>
-            <Popup>
-              관리기관명: {cctv['관리기관명']}<br />
-              소재지도로명주소: {cctv['소재지도로명주소']}<br />
-              설치목적구분: {cctv['설치목적구분']}<br />
-              카메라대수: {cctv['카메라대수']}<br />
-              설치연월: {cctv['설치연월']}<br />
-              관리기관전화번호: {cctv['관리기관전화번호']}<br />
-              데이터기준일자: {cctv['데이터기준일자']}<br />
-            </Popup>
-          </Marker>
-        ))}
+        {decodedCoordinates.length > 0 && (
+        <Polyline positions={decodedCoordinates} color='#258fff' />
+      )}
+        {routeCoordinates.length > 0 && (
+          <Polyline positions={routeCoordinates} color='#258fff' />
+        )}
 
         {cctvCircles} {/* Render the circles */}
       </MapContainer>
@@ -199,15 +192,66 @@ function Direction() {
         <div className='nav'>
           <div className='direction-tab'>도보경로</div>
           <div className='direction-tab'>안심경로</div>
-          <input className='start'
+          <input
+            className='start'
             type='text'
             placeholder='출발지'
+            value={startLocationQuery}
+            onChange={(e) => setStartLocationQuery(e.target.value)}
           />
-          <input className='end'
+          <input
+            className='end'
             type='text'
             placeholder='도착지'
+            value={endLocationQuery}
+            onChange={(e) => setEndLocationQuery(e.target.value)}
           />
-          <button className='route-button' >경로 검색</button>
+         <button
+  className='route-button'
+  onClick={async () => {
+    const startLocationCoords = await fetchLocationCoordinates(startLocationQuery);
+    const endLocationCoords = await fetchLocationCoordinates(endLocationQuery);
+
+    if (startLocationCoords && endLocationCoords) {
+      // Make a request to your backend API with the obtained coordinates
+      const requestData = {
+        start_x: startLocationCoords.lon,
+        start_y: startLocationCoords.lat,
+        end_x: endLocationCoords.lon,
+        end_y: endLocationCoords.lat,
+      };
+
+      try {
+        const response = await axios.post(
+          'http://localhost:8080/Safety_route/walking',
+          requestData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        if (response.data && response.data.code === 1) {
+          const data = JSON.parse(response.data.data);
+          if (data.routes && data.routes.length > 0) {
+            const osrmPolyline = data.routes[0].geometry;
+            setOsrmPolyline(osrmPolyline);
+          } else {
+            console.error('No valid route data found.');
+          }
+        } else {
+          console.error('No valid route data found.');
+        }
+      } catch (error) {
+        console.error('Error fetching route data:', error);
+      }
+    }
+  }}
+>
+  경로 검색
+</button>
+
         </div>
       </div>
     </div>
