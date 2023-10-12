@@ -3,9 +3,9 @@
 # > python main.py
 
 # 인천대-> CGV
-# http://127.0.0.1:5000/find_safe_route?depart_x=126.63486&depart_y=37.37692&arrive_x=126.64251&arrive_y=37.38308
+# http://127.0.0.1:5001/find_safe_route?depart_x=126.63486&depart_y=37.37692&arrive_x=126.64251&arrive_y=37.38308
 # 계양구
-# http://127.0.0.1:5000/find_safe_route?depart_x=126.73344&depart_y=37.52977&arrive_x=126.7428&arrive_y=37.53829
+# http://127.0.0.1:5001/find_safe_route?depart_x=126.73344&depart_y=37.52977&arrive_x=126.7428&arrive_y=37.53829
 from flask import Flask, request, Response, jsonify, make_response
 from flask_cors import CORS
 import requests
@@ -44,7 +44,7 @@ def find_safe_route():
             response = {'code': 404, 'message': 'OSRM response 404'}
             return make_response(json.dumps(response, ensure_ascii=False))
         else:
-            # near_cctv를 제외한 route_info 채우기
+            # nodes 채우기
             routes = OSRM_response.json()['routes']
             num_route = len(routes)
             nodes = [[] for _ in range(num_route)]
@@ -60,10 +60,14 @@ def find_safe_route():
             select_query = "select * from CCTV where (촬영방면 not like '%넛출선착장%' and 촬영방면 not like '%민원실%' and 촬영방면 not like '%복지상담실%' and 촬영방면 not like '%선진포물량장%' and 촬영방면 not like '%청사%')"
             cursor.execute(select_query)
             CCTVs = cursor.fetchall()
+            near_cctv_label = ['번호', '관리기관명', '소재지도로명주소', '소재지번주소', '설치목적', '카메라대수', '카메라화소', '촬영방면정보', '보관일수', '설치연월', '관리기관전화번호', 'WGS84위도', 'WGS84경도', '데이터기준일자']
             for CCTV in CCTVs:
                 for i in range(num_route):
                     if isCCTV_near(CCTV, nodes[i]):
-                        near_cctv[i].append(CCTV)
+                        tmp_cctv = {}
+                        for j in range(len(near_cctv_label)):
+                            tmp_cctv[near_cctv_label[j]] = CCTV[j]
+                        near_cctv[i].append(tmp_cctv)
             # response 보내기
             response = {'code': 200, 'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}
             return make_response(json.dumps(response, ensure_ascii=False))
@@ -73,10 +77,16 @@ def find_safe_route():
         return make_response(json.dumps(response, ensure_ascii=False))
 
 if __name__ == '__main__':
+    # db_connection = mysql.connector.connect(
+    #     host="localhost",
+    #     user="root",
+    #     password="tkrhdrhkdduf",
+    #     database="safety_route"
+    # )
     db_connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="tkrhdrhkdduf",
+        password="root",
         database="safety_route"
     )
     cursor = db_connection.cursor()

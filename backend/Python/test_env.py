@@ -12,6 +12,7 @@
 # > pip install requests
 # > pip install flask
 # > pip install mysql-connector-python
+# > pip install flask_cors
 
 # Flask 앱 생성
 from flask import Flask
