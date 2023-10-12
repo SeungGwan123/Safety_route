@@ -77,18 +77,18 @@ def find_safe_route():
         return make_response(json.dumps(response, ensure_ascii=False))
 
 if __name__ == '__main__':
-    # db_connection = mysql.connector.connect(
-    #     host="localhost",
-    #     user="root",
-    #     password="tkrhdrhkdduf",
-    #     database="safety_route"
-    # )
     db_connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root",
+        password="tkrhdrhkdduf",
         database="safety_route"
     )
+    # db_connection = mysql.connector.connect(
+    #     host="localhost",
+    #     user="root",
+    #     password="root",
+    #     database="safety_route"
+    # )
     cursor = db_connection.cursor()
     app.run(host='0.0.0.0', port=5001)
     cursor.close()
