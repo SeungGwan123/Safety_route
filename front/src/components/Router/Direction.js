@@ -214,30 +214,38 @@ onClick={async () => {
           if (response.data.near_cctv && Array.isArray(response.data.near_cctv)) {
             console.log('Received CCTV Data:', response.data.near_cctv);
             // Now, you can set the CCTV data to state
-            setCCTVData(response.data.near_cctv);
-            const cctvCircles = response.data.near_cctv
-            .map((cctv, index) => {
-              if (cctv.length >= 13) {
-                const latitude = cctv[index][11]; // Access the 12th element of the inner array for latitude
-                const longitude = cctv[index][12]; // Access the 13th element of the inner array for longitude
-      
-                const cctvLocation = [parseFloat(latitude), parseFloat(longitude)]; // Convert to floating-point numbers
-      
-                return (
-                  <Circle center={cctvLocation} radius={50} color="red" key={index}>
-                    <Popup>
-                      Latitude: {latitude} <br />
-                      Longitude: {longitude}
-                    </Popup>
-                  </Circle>
-                );
-              } else {
-                return null;
-              }
+            const cctvCircles = response.data.near_cctv.map((set, setIndex) => {
+              return set.map((cctv, index) => {
+                if (cctv.WGS84경도) {
+                  const latitude = parseFloat(cctv.WGS84위도);
+                  const longitude = parseFloat(cctv.WGS84경도);
+                  const cctvLocation = [latitude, longitude];
+            
+                  return (
+                    < Marker position={cctvLocation} icon={cctvIcon}  key={index}>
+                      <Popup>
+                      <p>WGS84 경도: {cctv.WGS84경도}</p>
+                      <p>WGS84 위도: {cctv.WGS84위도}</p>
+                      <p>관리기관명: {cctv.관리기관명}</p>
+                      <p>설치목적: {cctv.설치목적}</p>
+                      <p>설치연월: {cctv.설치연월}</p>
+                      <p>소재지 도로명주소: {cctv.소재지도로명주소}</p>
+                      <p>촬영방면정보: {cctv.촬영방면정보}</p>
+                      <p>카메라대수: {cctv.카메라대수}</p>
+                      <p>카메라화소: {cctv.카메라화소}</p>
+                      </Popup>
+                    </Marker>
+                  );
+                } else {
+                  return null;
+                }
+              });
             });
+            
+            
       
-          // Now, set the cctvCircles to state
-          setCCTVCircles(cctvCircles);
+            // Set the cctvCircles to state for rendering
+            setCCTVCircles(cctvCircles);
           }
         } else {
           console.error('No routes found.');
