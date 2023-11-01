@@ -84,11 +84,11 @@ function Main() {
       const { main, weather } = weatherData;
       return (
         <div className='weather'>
-        <h2>날씨 정보</h2>
-        <p>현재 위치: {weatherData.name}</p>
-        <p>온도: {main.temp} °C</p>
-        <p>날씨: {weather[0].description}</p>
-        <p>습기: {main.humidity}%</p>
+ 
+        <p>{weatherData.name}</p>
+        <p>{main.temp} °C</p>
+        <p>{weather[0].description}</p>
+        <p>{main.humidity}%</p>
       </div>
       );
     }
@@ -125,23 +125,9 @@ function Main() {
           </Popup>
         </Marker>
       </MapContainer>
-      <div className='menu-bar'>
-        <Link className='logo'>로고</Link>
-        <Link className='menu-button' style={{ background: "#258fff", color: "#fff" }} to="/"><div className="menu-button-content">
-        <img src={homeImage} alt="Route" />
-        <span>검색</span>
-      </div></Link>
-        <Link className='menu-button' to="/direction"><div className="menu-button-content">
-        <img src={routeImage} alt="Route" />
-        <span>길찾기</span>
-      </div></Link>
-        <Link className='menu-button' to="/cctv"><div className="menu-button-content">
-        <img src={cctvImage} alt="Route" />
-        <span>CCTV</span>
-      </div></Link>
-      </div>
+      
       <div className="menu">
-        <div className='nav'>
+      <div className='nav'>
           <input
             className='input-address'
             type="text"
@@ -157,6 +143,23 @@ function Main() {
           <div className='Search' onClick={searchAddress}></div>
           
         </div>
+      <div className='menu-bar'>
+        <Link className='logo'>로고</Link>
+        <Link className='menu-button'  to="/"> <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+       
+        <span>검색</span>
+      </div></Link>
+        <Link className='menu-button' to="/direction  "style={{  borderColor: "#03c75a" }}><img src={routeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        
+        <span>길찾기</span>
+      </div></Link>
+        <Link className='menu-button' to="/cctv" style={{borderColor:"#a0adb2"}}><img src={cctvImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        
+        <span>CCTV</span>
+      </div></Link>
+     
+      </div>
+     
       </div>
       
     </div>

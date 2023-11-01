@@ -39,38 +39,26 @@
 //   z-index: 99999;
 //   font-family: 'Noto Sans Vithkuqi', sans-serif;
 // }
-.menu-bar{
-  position: absolute;
-  top: 2.5%;
-  left: 5%;
-  width: 22px;
-  height: 22px;
-  background-size: contain;
-  background-image: url(../img/menu-bar.svg);
-  z-index: 99999;
-}
+
 .menu {
   position: fixed;
   background: #ffffff;
-  width: 26vw;
+  display: flex;
+  width: 360px;
   height: 100vh;
   z-index: 9999;
-  top: 0; /* Add this property to align it to the top */
-  left: 4%; /* Add this property to align it to the left */
+  justify-content: center;
+  top: 0;
 }
 .menu-bar{
-  position: fixed;
-  width: 4%;
-  background: #fff;
+  position: absolute;
   display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  border-right: solid 0.5px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  top: 12.5%;
+  z-index: 99999999999;
+  gap: 20px;
 }
+
 .logo{
   position: relative;
   list-style: none;
@@ -78,49 +66,56 @@
   justify-content: center;
   align-items: center;
   width: 62px;
-  height: 70px;
+  height:20px;
 }
 .menu-button{
   position: relative;
-  width: 62px;
+  width: 20%;
   display: flex;
   list-style: none;
   justify-content: center;
   align-items: center;
-  height: 62px;
+  height: 20px;
+  font-size: 0.7rem;
+  border: 1px solid #258fff;
+  border-radius: 2px;
+  color: black;
+  text-decoration: none;
+
 }
+
 .menu-button-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  
 }
 .searchicon{
   position: absolute;
   top: 5px;
 }
 .menu-button :hover{
-  color: #258fff;
+  color: #bcbdbd;
 }
 
 .nav {
   position: fixed;
   z-index: 999999;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 26vw;
+  width: 350px;
   height: 22vh;
   top: 0; /* Add this property to align it to the top */
-  left: 4%; /* Add this property to align it to the left */
+
 }
 
 
 
 .input-address{
   position: absolute;
-  width: 350px;
+  width: 340px;
   height: 46px;
   border-radius: 3px;
   background-color: #fff;
@@ -146,7 +141,7 @@
 .Search{
 position: absolute;
 top: 5vh;
-right: 10%;
+right: 5%;
   background-image: url(../img/ico_search21x212.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -163,15 +158,15 @@ right: 10%;
 .weather {
   position: fixed;
   display: flex;
-  top: 15%;
-  width: 25.9%;
+  top: 50%;
+  width: 10%;
   left: 4%;
-  height: 25%;
+  height: 10%;
   z-index: 999999;
   border: 1px solid #258fff;
   background-color: #fff; /* Add a white background color */
   color: #333; /* Darken the text color */
-  font-size: 1rem; /* Increase the font size for better readability */
+  font-size: 0.25em; /* Increase the font size for better readability */
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -181,7 +176,7 @@ right: 10%;
 
 .weather p {
   margin: 0; /* Remove default margin for paragraphs */
-  padding: 5px; /* Add some padding to the paragraphs */
+  padding: 2px; /* Add some padding to the paragraphs */
 }
 
 .direction-tab{
