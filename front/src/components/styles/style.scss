@@ -5,58 +5,37 @@
     position: absolute;
     width: 100%;
     display: flex;
-    justify-content: left;
+    justify-content: center;
     height: 100%;
     background: #ffffff;
 }
-.login{
-  position: fixed;
-  top: 2.5%;
-  right: 2.5vw;
-  width:65px;
-  height: 20px;
-  z-index: 99999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  border: 1px rgb(196, 194, 194) solid;
-  border-radius: 3px;
-  font-weight: bold;
-  color: #258fff;
-  font-size: 0.75rem;
-  gap: 3px;
-  
-}
-.login:hover{
-  color: #6aa4e3;
-}
-// .login-circle{
-//   background: linear-gradient(57deg,#9aefd5,#50cba0);
-//   width: 20px;
-//   height: 20px;
-//   border-radius: 50%;
-//   z-index: 99999;
-//   font-family: 'Noto Sans Vithkuqi', sans-serif;
-// }
 
 .menu {
   position: fixed;
-  background: #ffffff;
   display: flex;
-  width: 360px;
-  height: 100vh;
+  width: 350px;
+  height: 12.5vh;
   z-index: 9999;
   justify-content: center;
-  top: 0;
+  top: 2vh;
+  border-radius: 2px;
+  background: #ffffff;
+  -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
 }
 .menu-bar{
   position: absolute;
   display: flex;
-  width: 100%;
-  top: 12.5%;
+  width: 96%;
+  height: 5vh;
+  justify-content: center;
+  align-items: center;
+  top: 0%;
   z-index: 99999999999;
   gap: 20px;
+  background: #ffffff;
+
 }
 
 .logo{
@@ -73,9 +52,10 @@
   width: 20%;
   display: flex;
   list-style: none;
+  background: white;
   justify-content: center;
   align-items: center;
-  height: 20px;
+  height: 30px;
   font-size: 0.7rem;
   border: 1px solid #258fff;
   border-radius: 2px;
@@ -107,7 +87,18 @@
   align-items: center;
   width: 350px;
   height: 22vh;
-  top: 0; /* Add this property to align it to the top */
+  top: 5.5%; /* Add this property to align it to the top */
+
+}
+.nav-direction {
+  position: fixed;
+  z-index: 9999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  height: 22vh;
+  top: 5.5%; /* Add this property to align it to the top */
 
 }
 
@@ -124,11 +115,12 @@
   box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
   outline: none; /* Remove the outline */
   border: 2px solid #258fff; /* Remove the border */
-  top: 4vh;
+  top: 2vh;
 }
 .start{
   width: 232px;
   height: 20%;
+  z-index: 99999999;
 
 }
 .end{
@@ -140,7 +132,7 @@
 }
 .Search{
 position: absolute;
-top: 5vh;
+top: 3.2vh;
 right: 5%;
   background-image: url(../img/ico_search21x212.png);
   background-size: cover;
@@ -158,10 +150,10 @@ right: 5%;
 .weather {
   position: fixed;
   display: flex;
-  top: 50%;
-  width: 10%;
-  left: 4%;
-  height: 10%;
+  top: 2%;
+  right: 100px;
+  width: 20%;
+  height: 5%;
   z-index: 999999;
   border: 1px solid #258fff;
   background-color: #fff; /* Add a white background color */
@@ -169,7 +161,7 @@ right: 5%;
   font-size: 0.25em; /* Increase the font size for better readability */
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
   border-radius: 10px; /* Add rounded corners */
 }
@@ -177,6 +169,10 @@ right: 5%;
 .weather p {
   margin: 0; /* Remove default margin for paragraphs */
   padding: 2px; /* Add some padding to the paragraphs */
+}
+.weather img {
+  width: 30px;
+  height: 30px;
 }
 
 .direction-tab{

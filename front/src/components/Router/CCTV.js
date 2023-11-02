@@ -20,40 +20,20 @@ function CCTV() {
 
   
   const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
-  const fetchCCTVData = async (latitude, longitude) => {
-    try {
-      // Create the data object in the expected format
-      const requestData = {
-        code: '1',
-        data: [
-          { x: longitude, y: latitude }
-        ]
-      };
-      console.log(requestData)
-  
-      const response = await axios.post('http://localhost:8080/Safety_route/CCTV/searching', requestData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      // Log the response data for debugging
-      console.log('Response Data:', response.data);
-  
-      const cctvData = response.data.data;
-      setCCTVData(cctvData);
-    } catch (error) {
-      console.error("Error fetching CCTV data:", error);
-    }
-  };
-  
-  
-
-  const handleLocationChange = (newLatitude, newLongitude) => {
-    setMarkerPosition([newLatitude, newLongitude]);
-    fetchCCTVData(newLatitude, newLongitude);
-  };
-
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setMarkerPosition([latitude, longitude]);
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 15);
+        }
+      },
+      (error) => {
+        console.error("Error getting user's location:", error);
+      }
+    );
+  }, []);
   const handleAddressChange = (newAddress) => {
     axios
       .get(Nominatim_Base_Url, {
@@ -69,6 +49,10 @@ function CCTV() {
           const newLongitude = parseFloat(lon);
           setMarkerPosition([newLatitude, newLongitude]);
           fetchCCTVData(newLatitude, newLongitude);
+  
+          if (mapRef.current) {
+            mapRef.current.setView([newLatitude, newLongitude], 15);
+          }
         } else {
           console.error("Address not found.");
         }
@@ -77,6 +61,35 @@ function CCTV() {
         console.error("Error geocoding address:", error);
       });
   };
+  const fetchCCTVData = async (latitude, longitude) => {
+    try {
+        const requestData = {
+            x: longitude,
+            y: latitude,
+        };
+
+        const url = `http://localhost:8080/Safety_route/CCTV/searching`;
+
+        const response = await axios.post(url, requestData);
+
+        console.log('Response Data:', response.data);
+        const cctvData = response.data;
+        setCCTVData(cctvData);
+    } catch (error) {
+        console.error("Error fetching CCTV data:", error);
+    }
+};
+
+  
+  
+  
+
+  const handleLocationChange = (newLatitude, newLongitude) => {
+    setMarkerPosition([newLatitude, newLongitude]);
+    fetchCCTVData(newLatitude, newLongitude);
+  };
+
+
 
   useEffect(() => {
     if (userLocation) {
@@ -94,21 +107,30 @@ function CCTV() {
     // Whenever cctvData changes, you can update the map with CCTV markers
     const cctvIcon = new L.Icon({
       iconUrl: require("../img/cctv.png"),
-      iconSize: [15, 20],
+      iconSize: [25, 35],
       iconAnchor: [16, 21],
     });
 
     if (mapRef.current) {
-      cctvData.forEach((cctv, index) => {
-        const { x, y } = cctv;
-        L.marker([y, x], { icon: cctvIcon }).addTo(mapRef.current);
-      });
+      if (Array.isArray(cctvData.data)) {
+        cctvData.data.forEach((cctv, index) => {
+          if (typeof cctv.equator === 'number' && typeof cctv.latitude === 'number') {
+            // Check if equator and latitude are valid numbers
+            L.marker([cctv.latitude, cctv.equator], { icon: cctvIcon }).addTo(mapRef.current);
+          } else {
+            console.error("Invalid coordinates (equator, latitude):", cctv.equator, cctv.latitude);
+          }
+        });
+      } else {
+        console.error("cctvData.data is not an array:", cctvData.data);
+      }
     }
-  }, [cctvData]);
+    })
+    
 
   return (
     <div className='main'>
-      <MapContainer center={[37.5665, 126.9780]} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
+      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

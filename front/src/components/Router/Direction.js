@@ -12,7 +12,6 @@ const Nominatim_Base_Url = 'https://nominatim.openstreetmap.org/search';
 
 function Direction() {
   const [address, setAddress] = useState("");
-  const [userLocation, setUserLocation] = useState(null);
   const [markerPosition, setMarkerPosition] = useState([37.5665, 126.9780]);
   const [cctvData, setCCTVData] = useState([]);
   const [filteredCCTVData, setFilteredCCTVData] = useState([]);
@@ -26,11 +25,13 @@ function Direction() {
   const [osrmPolylines, setOsrmPolylines] = useState([]);
 
   useEffect(() => {
-
-    //현재 재위치 일단 서울시청으로 박아둠
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setUserLocation([37.5665, 126.9780]);
+        const { latitude, longitude } = position.coords;
+        setMarkerPosition([latitude, longitude]);
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 15);
+        }
       },
       (error) => {
         console.error("Error getting user's location:", error);
@@ -44,10 +45,19 @@ function Direction() {
     iconSize: [20, 24],
     iconAnchor: [12, 24],
   });
-
+  const destinationIcon = new L.Icon({
+    iconUrl: require("../img/flag.png"),
+    iconSize: [25, 35],
+    iconAnchor: [12, 24],
+  });
+  const startIcon = new L.Icon({
+    iconUrl: require("../img/start.png"),
+    iconSize: [30, 35],
+    iconAnchor: [12, 24],
+  });
   const cctvIcon = new L.Icon({
     iconUrl: require("../img/cctv.png"),
-    iconSize: [15, 20],
+    iconSize: [25, 35],
     iconAnchor: [16, 21],
   });
 
@@ -134,12 +144,12 @@ const fetchLocationCoordinates = async (query) => {
 
   return (
     <div className='main'>
-      <MapContainer center={[37.5665, 126.9780]} zoom={15} scrollWheelZoom={true} style={{ width: '100%', height: '100vh' }} ref={mapRef}>
+      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: '100%', height: '100vh' }} ref={mapRef}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        <Marker position={[37.56659, 126.9780]} icon={customIcon}>
+        <Marker position={markerPosition} icon={customIcon}>
           <Popup>
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
@@ -192,30 +202,53 @@ onClick={async () => {
     const endLocationCoords = await fetchLocationCoordinates(endLocationQuery);
 
     if (startLocationCoords && endLocationCoords) {
+      const startLat = startLocationCoords.lat;
+  const startLon = startLocationCoords.lon;
+  const endLat = endLocationCoords.lat;
+  const endLon = endLocationCoords.lon;
+  const startMarker = L.marker([startLat, startLon],{ icon: startIcon }).addTo(mapRef.current);
+  const endMarker = L.marker([endLat, endLon],{ icon: destinationIcon }).addTo(mapRef.current);
+  startMarker.bindPopup('출발지');
+  endMarker.bindPopup('도착지');
       const response = await axios.get(
         'http://127.0.0.1:5001/find_safe_route',
         {
           params: {
-            depart_x: startLocationCoords.lon,
-            depart_y: startLocationCoords.lat,
-            arrive_x: endLocationCoords.lon,
-            arrive_y: endLocationCoords.lat,
+            depart_x: startLon,
+        depart_y: startLat,
+        arrive_x: endLon,
+        arrive_y: endLat,
           },
         }
       );
 
       if (response.data && response.data.OSRM_response && response.data.OSRM_response.routes) {
         const routes = response.data.OSRM_response.routes;
-        console.log(response.data)
-        
+        console.log(response.data);
+    
         if (routes.length > 0) {
-          const polylines = routes.map(route => route.geometry);
-          setOsrmPolylines(polylines);
+          // Find the index of the longest CCTV data array
+          let maxCctvIndex = 0;
+          let maxCctvLength = response.data.near_cctv[0].length;
+    
+          for (let i = 1; i < response.data.near_cctv.length; i++) {
+            if (response.data.near_cctv[i].length > maxCctvLength) {
+              maxCctvLength = response.data.near_cctv[i].length;
+              maxCctvIndex = i;
+            }
+          }
+    
+          // Use the index to select the corresponding OSRM route
+          const selectedRoute = routes[maxCctvIndex];
+    
+          const polylines = selectedRoute.geometry;
+          setOsrmPolylines([polylines]);
+          const selectedCctvSet = response.data.near_cctv[maxCctvIndex];
           if (response.data.near_cctv && Array.isArray(response.data.near_cctv)) {
             console.log('Received CCTV Data:', response.data.near_cctv);
             // Now, you can set the CCTV data to state
             const cctvCircles = response.data.near_cctv.map((set, setIndex) => {
-              return set.map((cctv, index) => {
+              return selectedCctvSet.map((cctv, index) => {
                 if (cctv.WGS84경도) {
                   const latitude = parseFloat(cctv.WGS84위도);
                   const longitude = parseFloat(cctv.WGS84경도);
@@ -241,7 +274,7 @@ onClick={async () => {
                 }
               });
             });
-            
+            mapRef.current.setView([startLat, startLon], 15);
             
       
             // Set the cctvCircles to state for rendering

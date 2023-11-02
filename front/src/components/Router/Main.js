@@ -8,7 +8,8 @@ import axios from "axios";
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
-
+import weatherDescKo from '../Router/KoreanDescription';
+import Direction from './Direction';
 
 function Main() {
   const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
@@ -19,7 +20,6 @@ function Main() {
   const [markerPosition, setMarkerPosition] = useState([37.5665, 126.97]);
   const [weatherData, setWeatherData] = useState(null);
   const mapRef = useRef();
-
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -82,12 +82,17 @@ function Main() {
   const renderWeather = () => {
     if (weatherData) {
       const { main, weather } = weatherData;
+      const weatherCode = weather[0].id;
+      console.log(weatherCode)
+      const koreanDescription = weatherDescKo[weatherCode];
+      const weatherIconUrl = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
       return (
         <div className='weather'>
  
         <p>{weatherData.name}</p>
         <p>{main.temp} °C</p>
-        <p>{weather[0].description}</p>
+        <p>{koreanDescription ? koreanDescription : weather[0].description}</p>
+        <img src={weatherIconUrl} alt={koreanDescription} />
         <p>{main.humidity}%</p>
       </div>
       );
@@ -111,7 +116,6 @@ function Main() {
           <p>습기:</p>
         </div> */}
       {renderWeather()}
-      <div className='login'>로그인</div>
       <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -124,9 +128,8 @@ function Main() {
             우편번호: 04524
           </Popup>
         </Marker>
+        
       </MapContainer>
-      
-      <div className="menu">
       <div className='nav'>
           <input
             className='input-address'
@@ -143,13 +146,15 @@ function Main() {
           <div className='Search' onClick={searchAddress}></div>
           
         </div>
+      <div className="menu">
+      
       <div className='menu-bar'>
         <Link className='logo'>로고</Link>
-        <Link className='menu-button'  to="/"> <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        <Link className='menu-button'  to="/" > <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
        
         <span>검색</span>
       </div></Link>
-        <Link className='menu-button' to="/direction  "style={{  borderColor: "#03c75a" }}><img src={routeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        <Link className='menu-button' to="/direction  "style={{  borderColor: "#03c75a" }} ><img src={routeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
         
         <span>길찾기</span>
       </div></Link>
