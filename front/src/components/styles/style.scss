@@ -92,16 +92,23 @@
 }
 .nav-direction {
   position: fixed;
-  z-index: 9999999;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 350px;
-  height: 22vh;
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #258fff;
+  border-top:none ;
+  height: 15vh;
   top: 5.5%; /* Add this property to align it to the top */
 
 }
-
+.pd{
+  position: absolute;
+  width: 50px;
+  left: 0;
+}
 
 
 .input-address{
@@ -118,17 +125,32 @@
   top: 2vh;
 }
 .start{
+  position: absolute;
+  top: 35%;
   width: 232px;
-  height: 20%;
+  height: 10%;
   z-index: 99999999;
+  border: 1px solid #4dc857;
+  border-radius: 2px;
 
 }
 .end{
+  position: absolute;
   width: 232px;
-  height: 20%;
+  top: 50%;
+  height: 10%;
+  border: 1px solid #ed0303;
+  border-radius: 2px;
 }
 .route-button{
-  width: 20%;
+  position: absolute;
+  top: 70%;
+  width: 100px;
+  height: 30px;
+}
+.routebtn{
+  position: absolute;
+  width: 100%;
 }
 .Search{
 position: absolute;
@@ -175,6 +197,19 @@ right: 5%;
   height: 30px;
 }
 
-.direction-tab{
+.direction-tab1{
+  position: absolute;
+  top: 12.5%;
+  left: 20%;
+
+  justify-content: center;
   color: #258fff;
 }
+.direction-tab2{
+  position: absolute;
+  top: 12.5%;
+  right: 20%;
+  justify-content: center;
+  color: #258fff;
+}
+

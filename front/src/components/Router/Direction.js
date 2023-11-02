@@ -8,6 +8,8 @@ import { decode } from '@mapbox/polyline';
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
+import pedestrianImage from"../img/pedestrian.png";
+import routeButton from"../img/routebutton.png";
 const Nominatim_Base_Url = 'https://nominatim.openstreetmap.org/search';
 
 function Direction() {
@@ -161,25 +163,27 @@ const fetchLocationCoordinates = async (query) => {
 
     {cctvCircles}  {/* Render the circles */}
       </MapContainer>
+      <div className='menu'>
       <div className='menu-bar'>
-        <Link className='logo'>로고</Link>
-        <Link className='menu-button' to='/'><div className="menu-button-content">
-        <img src={homeImage} alt="Route" />
+      <Link className='logo'>로고</Link>
+        <Link className='menu-button'  to="/" > <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+       
         <span>검색</span>
       </div></Link>
-        <Link className='menu-button' style={{ background: '#258fff', color: '#fff' }} to='/direction'><div className="menu-button-content">
-        <img src={routeImage} alt="Route" />
+        <Link className='menu-button' to="/direction  "style={{  borderColor: "#03c75a" }} ><img src={routeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        
         <span>길찾기</span>
       </div></Link>
-        <Link className='menu-button' to='/cctv'><div className="menu-button-content">
-        <img src={cctvImage} alt="Route" />
+        <Link className='menu-button' to="/cctv" style={{borderColor:"#a0adb2"}}><img src={cctvImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
+        
         <span>CCTV</span>
       </div></Link>
       </div>
-      <div className='menu'>
-        <div className='nav'>
-          <div className='direction-tab'>도보경로</div>
-          <div className='direction-tab'>안심경로</div>
+      
+        <div className='nav-direction'>
+          <div className='direction-tab1'>도보경로</div>
+          <div className='direction-tab2'>안심경로</div>
+          <img className="pd" src={pedestrianImage} alt="src"></img>
           <input
             className='start'
             type='text'
@@ -195,7 +199,7 @@ const fetchLocationCoordinates = async (query) => {
             onChange={(e) => setEndLocationQuery(e.target.value)}
           />
          <button
-className="route-button"
+className="route-button" 
 onClick={async () => {
   try {
     const startLocationCoords = await fetchLocationCoordinates(startLocationQuery);
@@ -292,7 +296,7 @@ onClick={async () => {
   }
   
 }}
->
+><img className="routebtn" src={routeButton}></img>
 경로 검색
 </button>
 
