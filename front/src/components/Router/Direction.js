@@ -1,6 +1,6 @@
 import "../styles/style.scss";
 import React, { useEffect, useState, useRef } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, Polyline, Circle } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Polyline, Circle,ZoomControl } from 'react-leaflet';
 import { Link } from 'react-router-dom';
 import L from "leaflet";
 import axios from 'axios'
@@ -10,6 +10,7 @@ import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
 import pedestrianImage from"../img/pedestrian.png";
 import routeButton from"../img/routebutton.png";
+import logo from '../img/logo.jpeg';
 const Nominatim_Base_Url = 'https://nominatim.openstreetmap.org/search';
 
 function Direction() {
@@ -25,6 +26,11 @@ function Direction() {
   const [startLocation, setStartLocation] = useState(null);
   const [endLocation, setEndLocation] = useState(null);
   const [osrmPolylines, setOsrmPolylines] = useState([]);
+  const [selectedTab, setSelectedTab] = useState("도보경로");
+  const [distance, setDistance] = useState(null);
+  const [duration, setDuration] = useState(null);
+
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -49,7 +55,7 @@ function Direction() {
   });
   const destinationIcon = new L.Icon({
     iconUrl: require("../img/flag.png"),
-    iconSize: [25, 35],
+    iconSize: [30, 35],
     iconAnchor: [12, 24],
   });
   const startIcon = new L.Icon({
@@ -82,6 +88,7 @@ function Direction() {
         );
 
         if (response.data && response.data.code === 1) {
+          console.log(response.data)
             const data = JSON.parse(response.data.data);
             if (data.routes && data.routes.length > 0) {
                 const osrmPolyline = data.routes[0].geometry;
@@ -99,6 +106,7 @@ function Direction() {
         return null;
     }
 }
+
 const fetchLocationCoordinates = async (query) => {
   try {
     const response = await axios.get(Nominatim_Base_Url, {
@@ -136,6 +144,16 @@ const fetchLocationCoordinates = async (query) => {
     fetchData();
   }, []);
   const decodedCoordinates = decode(osrmPolyline, { precision: 5 });
+  const removeMarkers = () => {
+    if (mapRef.current) {
+      mapRef.current.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          mapRef.current.removeLayer(layer);
+        }
+      });
+    }
+  };
+  
   
   
   
@@ -146,7 +164,7 @@ const fetchLocationCoordinates = async (query) => {
 
   return (
     <div className='main'>
-      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: '100%', height: '100vh' }} ref={mapRef}>
+      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: '100%', height: '100vh' }} ref={mapRef} zoomControl={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -156,6 +174,7 @@ const fetchLocationCoordinates = async (query) => {
             A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
         </Marker>
+        
         {osrmPolylines.map((osrmPolyline, index) => (
   <Polyline key={index} positions={decode(osrmPolyline, { precision: 5 })} color='#258fff' />
 ))}
@@ -165,7 +184,7 @@ const fetchLocationCoordinates = async (query) => {
       </MapContainer>
       <div className='menu'>
       <div className='menu-bar'>
-      <Link className='logo'>로고</Link>
+      <div className='logo' >Safety Route</div>
         <Link className='menu-button'  to="/" > <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
        
         <span>검색</span>
@@ -181,8 +200,10 @@ const fetchLocationCoordinates = async (query) => {
       </div>
       
         <div className='nav-direction'>
-          <div className='direction-tab1'>도보경로</div>
-          <div className='direction-tab2'>안심경로</div>
+          <div className='direction-tab1'></div>
+          <div className='direction-tab2'>
+          <div className="walk"   onClick={() => setSelectedTab("도보경로")}style={{ color: selectedTab === "도보경로" ? '#258fff' : 'initial' }}>도보경로 </div>
+          <div className="safe"  onClick={() => setSelectedTab("안심경로")}style={{ color: selectedTab === "안심경로" ? '#258fff' : 'initial' }}>안심경로</div></div>
           <img className="pd" src={pedestrianImage} alt="src"></img>
           <input
             className='start'
@@ -197,23 +218,41 @@ const fetchLocationCoordinates = async (query) => {
             placeholder='도착지'
             value={endLocationQuery}
             onChange={(e) => setEndLocationQuery(e.target.value)}
+           
           />
+<div className="info-cont">
+  {distance !== null && duration !== null && (
+    <div className="info-content">
+      <div className="info-row">
+        <span className="info-label">목적지까지 거리:</span>
+        <span className="info-value">{distance} km</span>
+      </div>
+      <div className="info-row">
+        <span className="info-label">도보 소요 시간:</span>
+        <span className="info-value">{duration} 시간</span>
+      </div>
+    </div>
+  )}
+</div>
+
          <button
 className="route-button" 
 onClick={async () => {
+  const info = document.querySelector(".info-cont");
+  removeMarkers();
+  
+  
   try {
     const startLocationCoords = await fetchLocationCoordinates(startLocationQuery);
     const endLocationCoords = await fetchLocationCoordinates(endLocationQuery);
+    
 
     if (startLocationCoords && endLocationCoords) {
       const startLat = startLocationCoords.lat;
   const startLon = startLocationCoords.lon;
   const endLat = endLocationCoords.lat;
   const endLon = endLocationCoords.lon;
-  const startMarker = L.marker([startLat, startLon],{ icon: startIcon }).addTo(mapRef.current);
-  const endMarker = L.marker([endLat, endLon],{ icon: destinationIcon }).addTo(mapRef.current);
-  startMarker.bindPopup('출발지');
-  endMarker.bindPopup('도착지');
+  
       const response = await axios.get(
         'http://127.0.0.1:5001/find_safe_route',
         {
@@ -229,6 +268,25 @@ onClick={async () => {
       if (response.data && response.data.OSRM_response && response.data.OSRM_response.routes) {
         const routes = response.data.OSRM_response.routes;
         console.log(response.data);
+        if (selectedTab === "도보경로") {
+          // Handle when the "도보경로" tab is selected
+          setOsrmPolylines([routes[0].geometry]); // Display the route without CCTV
+          mapRef.current.setView([startLat, startLon], 15);
+          setCCTVCircles([]); // Remove CCTV markers
+          const distanceInKilometers = (routes[0].distance / 1000).toFixed(2); // Format distance with two decimal places
+          const durationInHours = (routes[0].duration / 3600).toFixed(2);
+          info.style.height="20vh"
+          setDistance(distanceInKilometers);
+          setDuration(durationInHours);
+          const startMarker = L.marker([startLat, startLon],{ icon: startIcon }).addTo(mapRef.current);
+  const endMarker = L.marker([endLat, endLon],{ icon: destinationIcon }).addTo(mapRef.current);
+  
+  startMarker.bindPopup('출발지');
+  endMarker.bindPopup('도착지');
+        } else {
+          // Handle when the "안심경로" tab is selected
+          // ... Your existing code ...
+        
     
         if (routes.length > 0) {
           // Find the index of the longest CCTV data array
@@ -246,6 +304,8 @@ onClick={async () => {
           const selectedRoute = routes[maxCctvIndex];
     
           const polylines = selectedRoute.geometry;
+          const distance = selectedRoute.distance; // Distance in meters
+          const duration = selectedRoute.duration;
           setOsrmPolylines([polylines]);
           const selectedCctvSet = response.data.near_cctv[maxCctvIndex];
           if (response.data.near_cctv && Array.isArray(response.data.near_cctv)) {
@@ -283,20 +343,33 @@ onClick={async () => {
       
             // Set the cctvCircles to state for rendering
             setCCTVCircles(cctvCircles);
+            info.style.height="20vh"
+            const km=(distance/1000).toFixed(2)
+            const hr=(duration/3600).toFixed(2)
+            setDistance(km);
+            setDuration(hr);
+            const startMarker = L.marker([startLat, startLon],{ icon: startIcon }).addTo(mapRef.current);
+  const endMarker = L.marker([endLat, endLon],{ icon: destinationIcon }).addTo(mapRef.current);
+  
+  startMarker.bindPopup('출발지');
+  endMarker.bindPopup('도착지');
+            
           }
         } else {
           console.error('No routes found.');
         }
-      } else {
+      }} else {
         console.error('No valid route data found.');
       }
+      
     }
   } catch (error) {
     console.error('Error fetching route data:', error);
   }
   
+
 }}
-><img className="routebtn" src={routeButton}></img>
+>
 경로 검색
 </button>
 

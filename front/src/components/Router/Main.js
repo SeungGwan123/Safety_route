@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 import L from "leaflet";
 import { Link } from 'react-router-dom';
 import "leaflet/dist/leaflet.css";
@@ -9,6 +9,7 @@ import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
 import weatherDescKo from '../Router/KoreanDescription';
+import logo from '../img/logo.jpeg';
 import Direction from './Direction';
 
 function Main() {
@@ -116,7 +117,7 @@ function Main() {
           <p>습기:</p>
         </div> */}
       {renderWeather()}
-      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef}>
+      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef} zoomControl={false}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -145,11 +146,12 @@ function Main() {
           />
           <div className='Search' onClick={searchAddress}></div>
           
+          
         </div>
       <div className="menu">
       
       <div className='menu-bar'>
-        <Link className='logo'>로고</Link>
+        <div className='logo' >Safety Route</div>
         <Link className='menu-button'  to="/" > <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
        
         <span>검색</span>

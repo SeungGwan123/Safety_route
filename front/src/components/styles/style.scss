@@ -1,25 +1,29 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@300&family=Noto+Sans+Vithkuqi:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@500&display=swap');
 
 .main{
     position: absolute;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     height: 100%;
     background: #ffffff;
 }
 
 .menu {
   position: fixed;
+  border-bottom: none;
   display: flex;
+  left: 2%;
   width: 350px;
+  overflow-y: hidden;
   height: 12.5vh;
   z-index: 9999;
   justify-content: center;
   top: 2vh;
-  border-radius: 2px;
   background: #ffffff;
+  border-radius: 2px;
   -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
   -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
   box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
@@ -27,25 +31,30 @@
 .menu-bar{
   position: absolute;
   display: flex;
-  width: 96%;
+  width: 350px;
   height: 5vh;
   justify-content: center;
   align-items: center;
   top: 0%;
+  background: #ffffff;
   z-index: 99999999999;
   gap: 20px;
-  background: #ffffff;
+
 
 }
 
 .logo{
   position: relative;
-  list-style: none;
+  top: 3%;
+  font-family: 'Playpen Sans', cursive;
+  color: #ed0303;
   display: flex;
+  width: 130px;
   justify-content: center;
   align-items: center;
-  width: 62px;
-  height:20px;
+  font-size: 1rem;
+  font-weight: bold;
+
 }
 .menu-button{
   position: relative;
@@ -88,6 +97,7 @@
   width: 350px;
   height: 22vh;
   top: 5.5%; /* Add this property to align it to the top */
+  left: 2.03%;
 
 }
 .nav-direction {
@@ -100,16 +110,57 @@
   border-radius: 4px;
   border: 1px solid #258fff;
   border-top:none ;
-  height: 15vh;
-  top: 5.5%; /* Add this property to align it to the top */
+  height: 20vh;
+  top: 7%; /* Add this property to align it to the top */
 
+}
+.info-cont {
+  position: absolute;
+  top: 101%;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Style for the info-content div */
+.info-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style for info-row */
+.info-row {
+  display: flex;
+  width: 100%;
+  margin: 20px 0;
+}
+
+/* Style for info-label (Distance and Duration labels) */
+.info-label {
+  font-weight: bold;
+  color: #258fff;
+}
+
+/* Style for info-value (Distance and Duration values) */
+.info-value {
+  color: #333;
 }
 .pd{
   position: absolute;
+  bottom: 45px;
   width: 50px;
   left: 0;
 }
-
+.walk{
+  position: absolute;
+  left: 10%;
+}
 
 .input-address{
   position: absolute;
@@ -126,7 +177,7 @@
 }
 .start{
   position: absolute;
-  top: 35%;
+  top: 70px;
   width: 232px;
   height: 10%;
   z-index: 99999999;
@@ -137,17 +188,40 @@
 .end{
   position: absolute;
   width: 232px;
-  top: 50%;
+  top: 90px;
   height: 10%;
   border: 1px solid #ed0303;
   border-radius: 2px;
 }
-.route-button{
+.route-button {
   position: absolute;
-  top: 70%;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100px;
-  height: 30px;
+  height: 25px;
+  background-color: #4CAF50; /* 감탄 받을 수 있는 색상 */
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+  transition: background-color 0.3s, color 0.3s;
 }
+
+.route-button:hover {
+  background-color: #45A049; /* 호버 시 색상 변경 */
+}
+
+/* 선택적으로 버튼에 아이콘 추가하기 */
+.route-button::before {
+  content: "\f138"; /* 원하는 아이콘 유니코드 추가 */
+  font-family: FontAwesome; /* 폰트어썸 아이콘 폰트 사용 */
+  margin-right: 5px;
+}
+
 .routebtn{
   position: absolute;
   width: 100%;
@@ -172,9 +246,9 @@ right: 5%;
 .weather {
   position: fixed;
   display: flex;
-  top: 2%;
-  right: 100px;
-  width: 20%;
+  top: 15%;
+  left: 2%;
+  width: 348px;
   height: 5%;
   z-index: 999999;
   border: 1px solid #258fff;
@@ -197,19 +271,33 @@ right: 5%;
   height: 30px;
 }
 
-.direction-tab1{
+.direction-tab1, .direction-tab2 {
   position: absolute;
   top: 12.5%;
-  left: 20%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #258fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
 
-  justify-content: center;
-  color: #258fff;
+.direction-tab1 {
+  left: 20%;
+  height: 20px;
+  background-color: #258fff;
 }
-.direction-tab2{
-  position: absolute;
-  top: 12.5%;
+
+.direction-tab2 {
   right: 20%;
-  justify-content: center;
-  color: #258fff;
+  height: 20px;
+  justify-content: flex-end;
 }
+
+
 
