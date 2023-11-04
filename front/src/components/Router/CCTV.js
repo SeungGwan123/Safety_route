@@ -51,7 +51,7 @@ function CCTV() {
         fetchCCTVData(newCenter.lat, newCenter.lng);
       });
     }
-  }, []);
+  }, [mapRef]);
 
   useEffect(() => {
     if (userLocation) {
@@ -130,8 +130,8 @@ function CCTV() {
         const newMarkers = [];
         const cctvIcon = new L.Icon({
           iconUrl: require("../img/cctv.png"),
-          iconSize: [25, 35],
-          iconAnchor: [16, 21],
+          iconSize: [20, 24],
+          iconAnchor: [5, 10],
         });
 
         cctvData.data.forEach((cctv, index) => {
@@ -142,6 +142,18 @@ function CCTV() {
             const marker = L.marker([cctv.latitude, cctv.equator], {
               icon: cctvIcon,
             }).addTo(mapRef.current);
+
+            const popupContent = `
+            <b>번호:</b> ${cctv.id}<br>
+            <b>위치:</b> ${cctv.Area}<br>
+            <b>전화번호:</b> ${cctv.call}<br>
+            <b>설치일자:</b> ${cctv.install_date}<br>
+            <b>상세위치:</b> ${cctv.new_address}<br>
+            <b>설치이유:</b> ${cctv.purpose}<br>
+            <b>최근 업데이트:</b> ${cctv.recent_update}<br>
+          `;
+
+            marker.bindPopup(popupContent);
             newMarkers.push(marker);
           } else {
             console.error(
@@ -166,7 +178,7 @@ function CCTV() {
         handleLocationChange(newCenter.lat, newCenter.lng);
       });
     }
-  }, []);
+  }, [mapRef]);
 
   return (
     <div className="main">
@@ -176,6 +188,9 @@ function CCTV() {
         scrollWheelZoom={true}
         style={{ width: "100%", height: "100vh" }}
         ref={mapRef}
+        whenCreated={(map) => {
+          mapRef.current = map;
+        }}
         zoomControl={false}
       >
         <TileLayer

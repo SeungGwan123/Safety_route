@@ -37,6 +37,7 @@ function Direction() {
   const [selectedTab, setSelectedTab] = useState("도보경로");
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
+  const alertRef = useRef(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -68,10 +69,10 @@ function Direction() {
     iconSize: [30, 35],
     iconAnchor: [12, 24],
   });
-  var cctvIcon = new L.Icon({
+  const cctvIcon = new L.Icon({
     iconUrl: require("../img/cctv.png"),
-    iconSize: [25, 35],
-    iconAnchor: [16, 21],
+    iconSize: [20, 24],
+    iconAnchor: [5, 10],
   });
 
   const mapRef = useRef();
@@ -185,6 +186,7 @@ function Direction() {
         ))}
         {cctvCircles} {/* Render the circles */}
       </MapContainer>
+      <div className="alert" ref={alertRef}></div>
       <div className="menu">
         <div className="menu-bar">
           <div className="logo">Safety Route</div>
@@ -407,6 +409,8 @@ function Direction() {
                                         data
                                       );
                                       handleResponseData(response.data, cctv);
+                                      alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}<br/>위험도: ${data.risk_level}<br/>현재상황: ${data.content}`;
+                                      alertRef.current.classList.add("show");
 
                                       // Handle the response data in your React application
                                     })
@@ -426,27 +430,31 @@ function Direction() {
                                     ) {
                                       console.log("if");
                                       const redIcon = new L.Icon({
-                                        iconUrl: require("../img/flag.png"), // URL for your custom red marker icon
-                                        iconSize: [30, 35], // Adjust the size as needed
-                                        iconAnchor: [15, 30], // Adjust the anchor point if necessary
+                                        iconUrl: require("../img/redcctv.png"), // URL for your custom red marker icon
+                                        iconSize: [20, 24],
+                                        iconAnchor: [10, 12], // Adjust the anchor point if necessary
                                       });
 
                                       // Create a marker with the red icon
                                       const redMarker = L.marker(cctvLocation, {
                                         icon: redIcon,
                                       }).addTo(mapRef.current);
+                                      L.circle(cctvLocation, {
+                                        color: "red", // 원의 테두리 색상 설정
+                                        fill: false, // 원 내부를 채우지 않음
+                                        weight: 2, // 테두리 두께 설정
+                                        radius: 50, // 초기 반지름 설정
+                                      }).addTo(mapRef.current);
+
+                                      // 자동 애니메이션 효과
+                                      const initialRadius = 50;
+                                      const finalRadius = 100; // 원이 커질 최종 반지름 설정
+                                      let growing = true; // 원을 키우는 상태
 
                                       // Add a popup to the marker
-                                      redMarker.bindPopup(`  <p>CCTV 번호: ${cctv.번호}</p>
-                      <p>WGS84 경도: ${cctv.WGS84경도}</p>
-                      <p>WGS84 위도: ${cctv.WGS84위도}</p>
-                      <p>관리기관명: ${cctv.관리기관명}</p>
-                      <p>설치목적: ${cctv.설치목적}</p>
-                      <p>설치연월: ${cctv.설치연월}</p>
-                      <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
-                      <p>촬영방면정보: ${cctv.촬영방면정보}</p>
-                      <p>카메라대수: ${cctv.카메라대수}</p>
-                      <p>카메라화소: ${cctv.카메라화소}</p>`); // Replace with your content
+                                      redMarker.bindPopup(
+                                        `<img src="${data.image}" width="300" height="400" />`
+                                      );
 
                                       markers.push(redMarker); // Add the red marker to the array
                                     } else {
