@@ -112,8 +112,8 @@ function CCTV() {
   };
 
   const customIcon = new L.Icon({
-    iconUrl: require("../img/search.png"),
-    iconSize: [20, 24],
+    iconUrl: require("../img/search.png"), // 이미지 경로를 올바르게 지정하세요.
+    iconSize: [30, 40],
     iconAnchor: [12, 24],
   });
 
@@ -153,7 +153,10 @@ function CCTV() {
             <b>최근 업데이트:</b> ${cctv.recent_update}<br>
           `;
 
-            marker.bindPopup(popupContent);
+            marker.bindPopup(popupContent, {
+              minWidth: 250, // Set a minimum width for the popup
+              className: "custom-popup",
+            });
             newMarkers.push(marker);
           } else {
             console.error(
@@ -173,12 +176,12 @@ function CCTV() {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.on("move", () => {
+      mapRef.current.on("moveend", () => {
         const newCenter = mapRef.current.getCenter();
         handleLocationChange(newCenter.lat, newCenter.lng);
       });
     }
-  }, [mapRef]);
+  }, [mapRef.current]);
 
   return (
     <div className="main">
@@ -195,7 +198,7 @@ function CCTV() {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
         />
         <Marker position={markerPosition} icon={customIcon}>
           <Popup>
@@ -227,7 +230,7 @@ function CCTV() {
           <Link
             className="menu-button"
             to="/cctv"
-            style={{ borderColor: "#a0adb2" }}
+            style={{ borderColor: "#a0adb2", background: "#e8e8ea" }}
           >
             <img src={cctvImage} alt="Route" width="20" height="20" />
             <div className="menu-button-content">

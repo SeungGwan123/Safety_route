@@ -17,6 +17,7 @@ import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
 import pedestrianImage from "../img/pedestrian.png";
+import routeWalk from "../img/routewalk.png";
 import routeButton from "../img/routebutton.png";
 import logo from "../img/logo.jpeg";
 const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
@@ -55,8 +56,8 @@ function Direction() {
   }, []);
 
   const customIcon = new L.Icon({
-    iconUrl: require("../img/search.png"),
-    iconSize: [20, 24],
+    iconUrl: require("../img/search.png"), // 이미지 경로를 올바르게 지정하세요.
+    iconSize: [30, 40],
     iconAnchor: [12, 24],
   });
   const destinationIcon = new L.Icon({
@@ -151,7 +152,7 @@ function Direction() {
   const removeMarkers = () => {
     if (mapRef.current) {
       mapRef.current.eachLayer((layer) => {
-        if (layer instanceof L.Marker) {
+        if (layer instanceof L.Marker || layer instanceof L.Circle) {
           mapRef.current.removeLayer(layer);
         }
       });
@@ -170,7 +171,7 @@ function Direction() {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
         />
         <Marker position={markerPosition} icon={customIcon}>
           <Popup>
@@ -181,7 +182,8 @@ function Direction() {
           <Polyline
             key={index}
             positions={decode(osrmPolyline, { precision: 5 })}
-            color="#258fff"
+            color="rgb(4, 117, 244)"
+            weight={6}
           />
         ))}
         {cctvCircles} {/* Render the circles */}
@@ -200,7 +202,7 @@ function Direction() {
           <Link
             className="menu-button"
             to="/direction  "
-            style={{ borderColor: "#03c75a" }}
+            style={{ borderColor: "#03c75a", background: "#e8e8ea" }}
           >
             <img src={routeImage} alt="Route" width="20" height="20" />
             <div className="menu-button-content">
@@ -269,6 +271,7 @@ function Direction() {
                 </div>
               </div>
             )}
+            <img className="routeWalk" src={routeWalk}></img>
           </div>
 
           <button
@@ -318,12 +321,14 @@ function Direction() {
                       const distanceInKilometers = (
                         routes[0].distance / 1000
                       ).toFixed(2); // Format distance with two decimal places
-                      const durationInHours = (
-                        routes[0].duration / 3600
-                      ).toFixed(2);
-                      info.style.height = "20vh";
+                      const durationInSeconds = routes[0].duration;
+                      const hours = Math.floor(durationInSeconds / 3600); // 초를 시간으로 변환
+                      const minutes = Math.floor(
+                        (durationInSeconds % 3600) / 60
+                      );
+                      info.style.visibility = "visible";
                       setDistance(distanceInKilometers);
-                      setDuration(durationInHours);
+                      setDuration(`${hours} 시간 ${minutes} 분`);
                       const startMarker = L.marker([startLat, startLon], {
                         icon: startIcon,
                       }).addTo(mapRef.current);
@@ -409,8 +414,6 @@ function Direction() {
                                         data
                                       );
                                       handleResponseData(response.data, cctv);
-                                      alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}<br/>위험도: ${data.risk_level}<br/>현재상황: ${data.content}`;
-                                      alertRef.current.classList.add("show");
 
                                       // Handle the response data in your React application
                                     })
@@ -428,6 +431,8 @@ function Direction() {
                                       cctv.번호 === data.cctv_number &&
                                       warning === data.risk_level
                                     ) {
+                                      alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}<br/>위험도: ${data.risk_level}<br/>현재상황: ${data.content}`;
+                                      alertRef.current.classList.add("show");
                                       console.log("if");
                                       const redIcon = new L.Icon({
                                         iconUrl: require("../img/redcctv.png"), // URL for your custom red marker icon
@@ -439,22 +444,26 @@ function Direction() {
                                       const redMarker = L.marker(cctvLocation, {
                                         icon: redIcon,
                                       }).addTo(mapRef.current);
+
                                       L.circle(cctvLocation, {
-                                        color: "red", // 원의 테두리 색상 설정
-                                        fill: false, // 원 내부를 채우지 않음
-                                        weight: 2, // 테두리 두께 설정
-                                        radius: 50, // 초기 반지름 설정
+                                        color: "red",
+                                        fill: false,
+                                        weight: 2,
+                                        radius: 50,
                                       }).addTo(mapRef.current);
 
-                                      // 자동 애니메이션 효과
-                                      const initialRadius = 50;
-                                      const finalRadius = 100; // 원이 커질 최종 반지름 설정
-                                      let growing = true; // 원을 키우는 상태
+                                      // Apply custom CSS styles for the popup content
+                                      const popupContent = `
+                                        <div class="custom-redpopup">
+                                          <img src="${data.image}" width="300" height="400" />
+                                        </div>
+                                      `;
 
-                                      // Add a popup to the marker
-                                      redMarker.bindPopup(
-                                        `<img src="${data.image}" width="300" height="400" />`
-                                      );
+                                      // Add the custom popup to the marker
+                                      redMarker.bindPopup(popupContent, {
+                                        maxWidth: 350, // Set a maximum width for the popup
+                                        className: "custom-redpopup", // Add a custom CSS class to style the popup
+                                      });
 
                                       markers.push(redMarker); // Add the red marker to the array
                                     } else {
@@ -465,17 +474,27 @@ function Direction() {
                                         { icon: cctvIcon }
                                       ).addTo(mapRef.current);
 
-                                      // Add a popup to the marker
-                                      regularMarker.bindPopup(`  <p>CCTV 번호: ${cctv.번호}</p>
-                      <p>WGS84 경도: ${cctv.WGS84경도}</p>
-                      <p>WGS84 위도: ${cctv.WGS84위도}</p>
-                      <p>관리기관명: ${cctv.관리기관명}</p>
-                      <p>설치목적: ${cctv.설치목적}</p>
-                      <p>설치연월: ${cctv.설치연월}</p>
-                      <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
-                      <p>촬영방면정보: ${cctv.촬영방면정보}</p>
-                      <p>카메라대수: ${cctv.카메라대수}</p>
-                      <p>카메라화소: ${cctv.카메라화소}</p>`); // Replace with your content
+                                      // Create a custom popup content with HTML and CSS styles
+                                      const popupContent = `
+                                        <div class="custom-popup">
+                                          <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
+                                          <p>WGS84 경도: ${cctv.WGS84경도}</p>
+                                          <p>WGS84 위도: ${cctv.WGS84위도}</p>
+                                          <p>관리기관명: ${cctv.관리기관명}</p>
+                                          <p>설치목적: ${cctv.설치목적}</p>
+                                          <p>설치연월: ${cctv.설치연월}</p>
+                                          <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
+                                          <p>촬영방면정보: ${cctv.촬영방면정보}</p>
+                                          <p>카메라대수: ${cctv.카메라대수}</p>
+                                          <p>카메라화소: ${cctv.카메라화소}</p>
+                                        </div>
+                                      `;
+
+                                      // Add the custom popup to the marker
+                                      regularMarker.bindPopup(popupContent, {
+                                        minWidth: 250, // Set a minimum width for the popup
+                                        className: "custom-popup", // Add a custom CSS class to style the popup
+                                      });
 
                                       markers.push(regularMarker); // Add the regular marker to the array
                                     }
@@ -499,9 +518,15 @@ function Direction() {
 
                           // Set the cctvCircles to state for rendering
 
-                          info.style.height = "20vh";
-                          const km = (distance / 1000).toFixed(2);
-                          const hr = (duration / 3600).toFixed(2);
+                          info.style.visibility = "visible";
+                          const km = (distance / 1000).toFixed(2); // 미터를 킬로미터로 변환하여 소수점 2자리까지 표시
+                          const durationInSeconds = duration; // 이미 초 단위로 표시되어 있으므로 변환할 필요 없음
+                          const hours = Math.floor(durationInSeconds / 3600); // 초를 시간으로 변환
+                          const minutes = Math.floor(
+                            (durationInSeconds % 3600) / 60
+                          ); // 초를 분으로 변환
+                          const hr = `${hours} 시간 ${minutes} 분`;
+
                           setDistance(km);
                           setDuration(hr);
                           const startMarker = L.marker([startLat, startLon], {

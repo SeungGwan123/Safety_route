@@ -28,6 +28,67 @@
   -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
   box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
 }
+.custom-popup .leaflet-popup-content-wrapper {
+  background:#2c3e50;
+  color:#fff;
+  font-size:12px;
+  line-height:24px;
+  }
+.custom-popup .leaflet-popup-content-wrapper a {
+  color:rgba(255,255,255,0.5);
+  }
+.custom-popup .leaflet-popup-tip-container {
+  width:30px;
+  height:15px;
+  }
+  
+  .custom-redpopup .leaflet-popup-content-wrapper {
+    background: #2c3e50;
+    color: #fff;
+    font-size: 12px;
+    line-height: 24px;
+  }
+  
+  .custom-redpopup .leaflet-popup-content-wrapper a {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .custom-redpopup .leaflet-popup-tip-container {
+    width: 30px;
+    height: 15px;
+  }
+  
+  .custom-redpopup img {
+    /* 이미지 크기 */
+    width: 250px;
+    height: 250px; /* 정사각형 이미지로 조절 */
+    object-fit: cover; /* 이미지 비율 유지 */
+
+    /* 테두리 스타일 추가 */
+    border-radius: 20px;
+
+    /* 그림자 효과 추가 */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+
+    /* 이미지를 중앙 정렬 */
+    display: block;
+
+    /* 이미지 애니메이션 추가 */
+    transition: transform 0.3s ease-in-out;
+}
+
+.custom-redpopup img:hover {
+    /* 이미지 확대 애니메이션 */
+    transform: scale(1.1);
+}
+
+
+
+  
+  
+ 
+  
+
 .alert {
   position: fixed;
   top: 10%;
@@ -136,16 +197,29 @@
   top: 7%; /* Add this property to align it to the top */
 
 }
+/* Style for the info-cont */
 .info-cont {
   position: absolute;
   top: 101%;
   left: 0;
   width: 100%;
+  height: 20vh;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  border-top: transparent;
+  border: 1px solid #a0afbf; /* Increase border width and change color */
+  border-radius: 10px; /* Increase border radius for a rounded look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+  display: flex;
+  justify-content: center;
+  text-align: left;
+  visibility: hidden;
+ /* Add more padding for better spacing */
+}
+.routeWalk{
+  position: absolute;
+  bottom: 20px;
+  width: 200px;
+  height: 60px;
 }
 
 /* Style for the info-content div */
@@ -153,31 +227,32 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  margin-top: 30px;
 }
 
 /* Style for info-row */
 .info-row {
-  display: flex;
   width: 100%;
-  margin: 20px 0;
-}
-.redDiv {
-  background-color: red;
-  /* 다른 스타일을 원하는 대로 추가하세요 */
-}
 
+}
 
 /* Style for info-label (Distance and Duration labels) */
 .info-label {
   font-weight: bold;
   color: #258fff;
+  text-transform: uppercase; /* Convert text to uppercase for emphasis */
+  font-size: 15px; /* Adjust font size */
+  font-weight: bold;
 }
 
 /* Style for info-value (Distance and Duration values) */
 .info-value {
   color: #333;
+  font-size: 16px; /* Adjust font size */
+  margin-left: 20px;
+  font-weight: bold;
 }
+
 .pd{
   position: absolute;
   bottom: 45px;

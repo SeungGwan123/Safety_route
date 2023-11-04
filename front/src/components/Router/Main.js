@@ -111,7 +111,7 @@ function Main() {
 
   const customIcon = new L.Icon({
     iconUrl: require("../img/search.png"), // 이미지 경로를 올바르게 지정하세요.
-    iconSize: [20, 24],
+    iconSize: [30, 40],
     iconAnchor: [12, 24],
   });
 
@@ -135,7 +135,7 @@ function Main() {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url="http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
         />
         <Marker position={markerPosition} icon={customIcon}>
           <Popup>
@@ -166,7 +166,11 @@ function Main() {
       <div className="menu">
         <div className="menu-bar">
           <div className="logo">Safety Route</div>
-          <Link className="menu-button" to="/">
+          <Link
+            className="menu-button"
+            to="/"
+            style={{ background: "#e8e8ea" }}
+          >
             {" "}
             <img src={homeImage} alt="Route" width="20" height="20" />
             <div className="menu-button-content">
