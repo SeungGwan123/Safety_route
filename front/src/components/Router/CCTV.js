@@ -1,25 +1,31 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, Circle, ZoomControl} from 'react-leaflet';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  Circle,
+  ZoomControl,
+} from "react-leaflet";
 import L from "leaflet";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/style.scss";
 import axios from "axios";
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
-import logo from '../img/logo.jpeg';
+import logo from "../img/logo.jpeg";
 
 function CCTV() {
   const [address, setAddress] = useState("");
   const [userLocation, setUserLocation] = useState(null);
-  const [markerPosition, setMarkerPosition] = useState([37.5665, 126.9780]);
+  const [markerPosition, setMarkerPosition] = useState([37.5665, 126.978]);
   const mapRef = useRef();
   const [cctvData, setCCTVData] = useState([]);
   const [cctvMarkers, setCCTVMarkers] = useState([]);
 
   const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
-
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -38,14 +44,14 @@ function CCTV() {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.on('drag', () => {
-        console.log('Map dragged!');
+      mapRef.current.on("moveend", () => {
+        console.log("Map dragged!");
         const newCenter = mapRef.current.getCenter();
-        console.log('New Center (lat, lng):', newCenter.lat, newCenter.lng);
+        console.log("New Center (lat, lng):", newCenter.lat, newCenter.lng);
         fetchCCTVData(newCenter.lat, newCenter.lng);
       });
     }
-  }, [mapRef]);
+  }, []);
 
   useEffect(() => {
     if (userLocation) {
@@ -87,12 +93,12 @@ function CCTV() {
         x: longitude,
         y: latitude,
       };
-  
+
       const url = `http://localhost:8080/Safety_route/CCTV/searching`;
-  
+
       const response = await axios.post(url, requestData);
-      console.log('Response Data:', response.data);
-  
+      console.log("Response Data:", response.data);
+
       const cctvData = response.data;
       setCCTVData(cctvData);
     } catch (error) {
@@ -104,9 +110,6 @@ function CCTV() {
     setMarkerPosition([newLatitude, newLongitude]);
     fetchCCTVData(newLatitude, newLongitude);
   };
-
- 
-
 
   const customIcon = new L.Icon({
     iconUrl: require("../img/search.png"),
@@ -121,7 +124,7 @@ function CCTV() {
       cctvMarkers.forEach((marker) => {
         mapRef.current.removeLayer(marker);
       });
-  
+
       // Add new CCTV markers
       if (Array.isArray(cctvData.data)) {
         const newMarkers = [];
@@ -130,16 +133,25 @@ function CCTV() {
           iconSize: [25, 35],
           iconAnchor: [16, 21],
         });
-  
+
         cctvData.data.forEach((cctv, index) => {
-          if (typeof cctv.equator === 'number' && typeof cctv.latitude === 'number') {
-            const marker = L.marker([cctv.latitude, cctv.equator], { icon: cctvIcon }).addTo(mapRef.current);
+          if (
+            typeof cctv.equator === "number" &&
+            typeof cctv.latitude === "number"
+          ) {
+            const marker = L.marker([cctv.latitude, cctv.equator], {
+              icon: cctvIcon,
+            }).addTo(mapRef.current);
             newMarkers.push(marker);
           } else {
-            console.error("Invalid coordinates (equator, latitude):", cctv.equator, cctv.latitude);
+            console.error(
+              "Invalid coordinates (equator, latitude):",
+              cctv.equator,
+              cctv.latitude
+            );
           }
         });
-  
+
         setCCTVMarkers(newMarkers);
       } else {
         console.error("cctvData.data is not an array:", cctvData.data);
@@ -154,11 +166,18 @@ function CCTV() {
         handleLocationChange(newCenter.lat, newCenter.lng);
       });
     }
-  }, [mapRef]);
+  }, []);
 
   return (
-    <div className='main'>
-      <MapContainer center={markerPosition} zoom={15} scrollWheelZoom={true} style={{ width: "100%", height: "100vh" }} ref={mapRef} zoomControl={false}>
+    <div className="main">
+      <MapContainer
+        center={markerPosition}
+        zoom={15}
+        scrollWheelZoom={true}
+        style={{ width: "100%", height: "100vh" }}
+        ref={mapRef}
+        zoomControl={false}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -169,38 +188,54 @@ function CCTV() {
           </Popup>
         </Marker>
       </MapContainer>
-     
+
       <div className="menu">
-      <div className='menu-bar'>
-      <div className='logo' >Safety Route</div>
-        <Link className='menu-button'  to="/" > <img src={homeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
-       
-        <span>검색</span>
-      </div></Link>
-        <Link className='menu-button' to="/direction  "style={{  borderColor: "#03c75a" }} ><img src={routeImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
-        
-        <span>길찾기</span>
-      </div></Link>
-        <Link className='menu-button' to="/cctv" style={{borderColor:"#a0adb2"}}><img src={cctvImage} alt="Route" width="20" height="20" /><div className="menu-button-content">
-        
-        <span>CCTV</span>
-      </div></Link>
-      </div>
-        <div className='nav'>
+        <div className="menu-bar">
+          <div className="logo">Safety Route</div>
+          <Link className="menu-button" to="/">
+            {" "}
+            <img src={homeImage} alt="Route" width="20" height="20" />
+            <div className="menu-button-content">
+              <span>검색</span>
+            </div>
+          </Link>
+          <Link
+            className="menu-button"
+            to="/direction  "
+            style={{ borderColor: "#03c75a" }}
+          >
+            <img src={routeImage} alt="Route" width="20" height="20" />
+            <div className="menu-button-content">
+              <span>길찾기</span>
+            </div>
+          </Link>
+          <Link
+            className="menu-button"
+            to="/cctv"
+            style={{ borderColor: "#a0adb2" }}
+          >
+            <img src={cctvImage} alt="Route" width="20" height="20" />
+            <div className="menu-button-content">
+              <span>CCTV</span>
+            </div>
+          </Link>
+        </div>
+        <div className="nav">
           <input
-            className='input-address'
+            className="input-address"
             type="text"
             placeholder="주소를 입력해 주변 cctv를 확인하세요!"
             value={address}
-            onChange={(e) => setAddress(e.target.value)
-            }
+            onChange={(e) => setAddress(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleAddressChange(address)
+              if (e.key === "Enter") {
+                handleAddressChange(address);
               }
             }}
           />
-          <div className='Search' onClick={() => handleAddressChange(address)}>검색</div>
+          <div className="Search" onClick={() => handleAddressChange(address)}>
+            검색
+          </div>
         </div>
       </div>
     </div>
