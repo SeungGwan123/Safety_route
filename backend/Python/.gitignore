@@ -2,3 +2,4 @@ myenv
 .editorconfig
 .vscode
 __pycache__
+capture_picamera.jpg
