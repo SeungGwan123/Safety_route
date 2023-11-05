@@ -16,6 +16,7 @@ import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
 import logo from "../img/logo.jpeg";
+import cctvBind from "../img/cctvpopup.png";
 
 function CCTV() {
   const [address, setAddress] = useState("");
@@ -80,6 +81,7 @@ function CCTV() {
           }
         } else {
           console.error("Address not found.");
+          alert("주소가 없습니다 다시 검색해주세요");
         }
       })
       .catch((error) => {
@@ -145,6 +147,7 @@ function CCTV() {
 
             const popupContent = `
             <b>번호:</b> ${cctv.id}<br>
+            <img src="http://192.168.174.122:8000/stream.mjpg" />
             <b>위치:</b> ${cctv.Area}<br>
             <b>전화번호:</b> ${cctv.call}<br>
             <b>설치일자:</b> ${cctv.install_date}<br>
@@ -154,7 +157,7 @@ function CCTV() {
           `;
 
             marker.bindPopup(popupContent, {
-              minWidth: 250, // Set a minimum width for the popup
+              minWidth: 350, // Set a minimum width for the popup
               className: "custom-popup",
             });
             newMarkers.push(marker);

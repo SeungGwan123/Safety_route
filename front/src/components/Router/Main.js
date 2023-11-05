@@ -80,7 +80,7 @@ function Main() {
           setMarkerPosition([lat, lon]);
         }
       } else {
-        console.error("Address not found.");
+        alert("주소가 없습니다 다시 검색해주세요");
       }
     } catch (error) {
       console.error("Error searching for address:", error);

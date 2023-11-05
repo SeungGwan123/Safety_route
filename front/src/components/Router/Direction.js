@@ -20,6 +20,7 @@ import pedestrianImage from "../img/pedestrian.png";
 import routeWalk from "../img/routewalk.png";
 import routeButton from "../img/routebutton.png";
 import logo from "../img/logo.jpeg";
+import cctvBind from "../img/cctvpopup.png";
 const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
 
 function Direction() {
@@ -125,7 +126,7 @@ function Direction() {
         const location = response.data[0];
         return { lat: parseFloat(location.lat), lon: parseFloat(location.lon) };
       } else {
-        console.error("No location data found for the query.");
+        alert("경로가 없습니다 다시 검색해주세요");
         return null;
       }
     } catch (error) {
@@ -278,6 +279,7 @@ function Direction() {
             className="route-button"
             onClick={async () => {
               const info = document.querySelector(".info-cont");
+              alertRef.current.classList.remove("show");
               removeMarkers();
 
               try {
@@ -454,15 +456,26 @@ function Direction() {
 
                                       // Apply custom CSS styles for the popup content
                                       const popupContent = `
-                                        <div class="custom-redpopup">
-                                          <img src="${data.image}" width="300" height="400" />
-                                        </div>
-                                      `;
+                                      <div class="custom-popup">
+                                        <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
+                                        <img src=https://image.zdnet.co.kr/2023/07/21/enter72f35aebaa72d84db434a8b952117dff.jpg />
+                                        <p>WGS84 경도: ${cctv.WGS84경도}</p>
+                                        <p>WGS84 위도: ${cctv.WGS84위도}</p>
+                                        <p>관리기관명: ${cctv.관리기관명}</p>
+                                        <p>설치목적: ${cctv.설치목적}</p>
+                                        <p>설치연월: ${cctv.설치연월}</p>
+                                        <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
+                                        <p>촬영방면정보: ${cctv.촬영방면정보}</p>
+                                        <p>카메라대수: ${cctv.카메라대수}</p>
+                                        <p>카메라화소: ${cctv.카메라화소}</p>
+                                        
+                                      </div>
+                                    `;
 
                                       // Add the custom popup to the marker
                                       redMarker.bindPopup(popupContent, {
                                         maxWidth: 350, // Set a maximum width for the popup
-                                        className: "custom-redpopup", // Add a custom CSS class to style the popup
+                                        className: "custom-popup", // Add a custom CSS class to style the popup
                                       });
 
                                       markers.push(redMarker); // Add the red marker to the array
@@ -476,23 +489,25 @@ function Direction() {
 
                                       // Create a custom popup content with HTML and CSS styles
                                       const popupContent = `
-                                        <div class="custom-popup">
-                                          <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
-                                          <p>WGS84 경도: ${cctv.WGS84경도}</p>
-                                          <p>WGS84 위도: ${cctv.WGS84위도}</p>
-                                          <p>관리기관명: ${cctv.관리기관명}</p>
-                                          <p>설치목적: ${cctv.설치목적}</p>
-                                          <p>설치연월: ${cctv.설치연월}</p>
-                                          <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
-                                          <p>촬영방면정보: ${cctv.촬영방면정보}</p>
-                                          <p>카메라대수: ${cctv.카메라대수}</p>
-                                          <p>카메라화소: ${cctv.카메라화소}</p>
-                                        </div>
-                                      `;
+                                      <div class="custom-popup">
+                                        <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
+                                        <img src="http://192.168.174.122:8000/stream.mjpg" />
+                                        <p>WGS84 경도: ${cctv.WGS84경도}</p>
+                                        <p>WGS84 위도: ${cctv.WGS84위도}</p>
+                                        <p>관리기관명: ${cctv.관리기관명}</p>
+                                        <p>설치목적: ${cctv.설치목적}</p>
+                                        <p>설치연월: ${cctv.설치연월}</p>
+                                        <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
+                                        <p>촬영방면정보: ${cctv.촬영방면정보}</p>
+                                        <p>카메라대수: ${cctv.카메라대수}</p>
+                                        <p>카메라화소: ${cctv.카메라화소}</p>
+                                        
+                                      </div>
+                                    `;
 
                                       // Add the custom popup to the marker
                                       regularMarker.bindPopup(popupContent, {
-                                        minWidth: 250, // Set a minimum width for the popup
+                                        minWidth: 350, // Set a minimum width for the popup
                                         className: "custom-popup", // Add a custom CSS class to style the popup
                                       });
 
