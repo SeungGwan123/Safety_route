@@ -1,4 +1,5 @@
-# test_env.py 먼저 확인
+# test.ipynb 먼저 확인
+# db_connection 확인
 # > myenv\Scripts\activate
 # > python main.py
 
@@ -69,7 +70,8 @@ def find_safe_route():
                             tmp_cctv[near_cctv_label[j]] = CCTV[j]
                         near_cctv[i].append(tmp_cctv)
             # response 보내기
-            response = {'code': 200, 'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}
+            # response = {'code': 200, 'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}
+            response = {'code': 200, 'data': {'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}}
             return make_response(json.dumps(response, ensure_ascii=False))
     except Exception as e:
         err = traceback.format_exc()
@@ -77,18 +79,18 @@ def find_safe_route():
         return make_response(json.dumps(response, ensure_ascii=False))
 
 if __name__ == '__main__':
-    db_connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="tkrhdrhkdduf",
-        database="safety_route"
-    )
     # db_connection = mysql.connector.connect(
     #     host="localhost",
     #     user="root",
-    #     password="root",
+    #     password="tkrhdrhkdduf",
     #     database="safety_route"
     # )
+    db_connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="safety_route"
+    )
     cursor = db_connection.cursor()
     app.run(host='0.0.0.0', port=5001)
     cursor.close()
