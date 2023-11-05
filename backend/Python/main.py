@@ -69,13 +69,29 @@ def find_safe_route():
                             tmp_cctv[near_cctv_label[j]] = CCTV[j]
                         near_cctv[i].append(tmp_cctv)
             # response 보내기
-            response = {'code': 200, 'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}
+                        response = {'code': 200, 'data': {'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}}
             return make_response(json.dumps(response, ensure_ascii=False))
     except Exception as e:
         err = traceback.format_exc()
         response = {'code': 400, 'message': err}
         return make_response(json.dumps(response, ensure_ascii=False))
+@app.route('/send_cctv_number', methods=['POST'])
+def send_cctv_number():
+    try:
+        
 
+        response = {
+                  'cctv_number': 8321,
+                'risk_level': "위험",
+                'content': "현재 13시50분 cctv에 칼부림 일어남",
+                'image': "https://image.news1.kr/system/photos/2023/7/21/6117093/article.jpg"
+         }
+
+        return make_response(json.dumps(response, ensure_ascii=False))
+    except Exception as e:
+        err = traceback.format_exc()
+        response = {'code': 400, 'message': err}
+        return make_response(json.dumps(response, ensure_ascii=False))
 if __name__ == '__main__':
     db_connection = mysql.connector.connect(
         host="localhost",

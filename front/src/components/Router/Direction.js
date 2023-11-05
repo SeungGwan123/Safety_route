@@ -307,14 +307,14 @@ function Direction() {
                       },
                     }
                   );
-
+                  console.log(response.data.data);
                   if (
-                    response.data &&
-                    response.data.OSRM_response &&
-                    response.data.OSRM_response.routes
+                    response.data.data &&
+                    response.data.data.OSRM_response &&
+                    response.data.data.OSRM_response.routes
                   ) {
-                    const routes = response.data.OSRM_response.routes;
-                    console.log(response.data);
+                    const routes = response.data.data.OSRM_response.routes;
+                    console.log(response.data.data);
                     if (selectedTab === "도보경로") {
                       // Handle when the "도보경로" tab is selected
                       setOsrmPolylines([routes[0].geometry]); // Display the route without CCTV
@@ -347,17 +347,20 @@ function Direction() {
                       if (routes.length > 0) {
                         // Find the index of the longest CCTV data array
                         let maxCctvIndex = 0;
-                        let maxCctvLength = response.data.near_cctv[0].length;
+                        let maxCctvLength =
+                          response.data.data.near_cctv[0].length;
 
                         for (
                           let i = 1;
-                          i < response.data.near_cctv.length;
+                          i < response.data.data.near_cctv.length;
                           i++
                         ) {
                           if (
-                            response.data.near_cctv[i].length > maxCctvLength
+                            response.data.data.near_cctv[i].length >
+                            maxCctvLength
                           ) {
-                            maxCctvLength = response.data.near_cctv[i].length;
+                            maxCctvLength =
+                              response.data.data.near_cctv[i].length;
                             maxCctvIndex = i;
                           }
                         }
@@ -370,17 +373,17 @@ function Direction() {
                         const duration = selectedRoute.duration;
                         setOsrmPolylines([polylines]);
                         const selectedCctvSet =
-                          response.data.near_cctv[maxCctvIndex];
+                          response.data.data.near_cctv[maxCctvIndex];
                         if (
-                          response.data.near_cctv &&
-                          Array.isArray(response.data.near_cctv)
+                          response.data.data.near_cctv &&
+                          Array.isArray(response.data.data.near_cctv)
                         ) {
                           console.log(
                             "Received CCTV Data:",
-                            response.data.near_cctv
+                            response.data.data.near_cctv
                           );
                           // Now, you can set the CCTV data to state
-                          const cctvCircles = response.data.near_cctv.map(
+                          const cctvCircles = response.data.data.near_cctv.map(
                             (set, setIndex) => {
                               return selectedCctvSet.map((cctv, index) => {
                                 if (cctv.WGS84경도) {
