@@ -436,7 +436,7 @@ function Direction() {
                                       cctv.번호 === data.cctv_number &&
                                       warning === data.risk_level
                                     ) {
-                                      alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}<br/>위험도: ${data.risk_level}<br/>현재상황: ${data.content}`;
+                                      alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}`;
                                       alertRef.current.classList.add("show");
                                       console.log("if");
                                       const redIcon = new L.Icon({

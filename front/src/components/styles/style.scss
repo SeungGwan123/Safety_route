@@ -85,13 +85,16 @@
   position: fixed;
   top: 10%;
   right: 10px;
+  display: flex;
   background: #e74c3c;
   color: #fff;
   border: 2px solid #811003;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 15px;
-  max-width: 300px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
   z-index: 99999999;
   visibility: hidden;
   opacity: 0;
