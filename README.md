@@ -16,4 +16,4 @@
 <li>chore	빌드 업무 수정, 패키지 매니저 수정 (gitignore 수정 등)</li>
 <li>rename	파일 혹은 폴더명을 수정만 한 경우</li>
 <li>remove	파일을 삭제만 한 경우</li>
-li>release : 버전 릴리즈</li>
+<li>release : 버전 릴리즈</li>
