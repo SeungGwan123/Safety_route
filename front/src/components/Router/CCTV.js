@@ -1,22 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  Circle,
-  ZoomControl,
-} from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
-import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import "../styles/style.scss";
 import axios from "axios";
-import routeImage from "../img/route.svg";
-import homeImage from "../img/home.svg";
-import cctvImage from "../img/cctv.svg";
-import logo from "../img/logo.jpeg";
-import cctvBind from "../img/cctvpopup.png";
+import MenuBar from "./MenuBar";
+import Nav from "../../module/Nav";
+import { handleAddressChange } from "../../module/handleAddressChange";
+import Map from "./Map";
 
 function CCTV() {
   const [address, setAddress] = useState("");
@@ -60,33 +51,14 @@ function CCTV() {
     }
   }, [userLocation]);
 
-  const handleAddressChange = (newAddress) => {
-    axios
-      .get(Nominatim_Base_Url, {
-        params: {
-          q: newAddress,
-          format: "json",
-        },
-      })
-      .then((response) => {
-        if (response.data && response.data.length > 0) {
-          const { lat, lon } = response.data[0];
-          const newLatitude = parseFloat(lat);
-          const newLongitude = parseFloat(lon);
-          setMarkerPosition([newLatitude, newLongitude]);
-          fetchCCTVData(newLatitude, newLongitude);
-
-          if (mapRef.current) {
-            mapRef.current.setView([newLatitude, newLongitude], 15);
-          }
-        } else {
-          console.error("Address not found.");
-          alert("주소가 없습니다 다시 검색해주세요");
-        }
-      })
-      .catch((error) => {
-        console.error("Error geocoding address:", error);
-      });
+  const handleAddressChangeWrapper = (newAddress) => {
+    handleAddressChange(
+      newAddress,
+      setMarkerPosition,
+      mapRef,
+      Nominatim_Base_Url,
+      fetchCCTVData
+    );
   };
 
   const fetchCCTVData = async (latitude, longitude) => {
@@ -188,76 +160,24 @@ function CCTV() {
 
   return (
     <div className="main">
-      <MapContainer
-        center={markerPosition}
-        zoom={15}
-        scrollWheelZoom={true}
-        style={{ width: "100%", height: "100vh" }}
-        ref={mapRef}
-        whenCreated={(map) => {
-          mapRef.current = map;
-        }}
-        zoomControl={false}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
-        />
-        <Marker position={markerPosition} icon={customIcon}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </MapContainer>
+      <Map
+        markerPosition={markerPosition}
+        customIcon={customIcon}
+        cctvMarkers={cctvMarkers}
+        setCCTVMarkers={setCCTVMarkers}
+        cctvData={cctvData}
+        mapRef={mapRef}
+        handleLocationChange={handleLocationChange}
+        fetchCCTVData={fetchCCTVData}
+      />
 
       <div className="menu">
-        <div className="menu-bar">
-          <div className="logo">Safety Route</div>
-          <Link className="menu-button" to="/">
-            {" "}
-            <img src={homeImage} alt="Route" width="20" height="20" />
-            <div className="menu-button-content">
-              <span>검색</span>
-            </div>
-          </Link>
-          <Link
-            className="menu-button"
-            to="/direction  "
-            style={{ borderColor: "#03c75a" }}
-          >
-            <img src={routeImage} alt="Route" width="20" height="20" />
-            <div className="menu-button-content">
-              <span>길찾기</span>
-            </div>
-          </Link>
-          <Link
-            className="menu-button"
-            to="/cctv"
-            style={{ borderColor: "#a0adb2", background: "#e8e8ea" }}
-          >
-            <img src={cctvImage} alt="Route" width="20" height="20" />
-            <div className="menu-button-content">
-              <span>CCTV</span>
-            </div>
-          </Link>
-        </div>
-        <div className="nav">
-          <input
-            className="input-address"
-            type="text"
-            placeholder="주소를 입력해 주변 cctv를 확인하세요!"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleAddressChange(address);
-              }
-            }}
-          />
-          <div className="Search" onClick={() => handleAddressChange(address)}>
-            검색
-          </div>
-        </div>
+        <MenuBar />
+        <Nav
+          handleAddressChange={handleAddressChangeWrapper}
+          address={address}
+          setAddress={setAddress}
+        />
       </div>
     </div>
   );
