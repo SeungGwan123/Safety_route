@@ -1,7 +1,6 @@
 import L from "leaflet";
-
 export const handleResponseData = (
-  data,
+  cctvdata,
   cctv,
   cctvLocation,
   mapRef,
@@ -12,9 +11,12 @@ export const handleResponseData = (
 ) => {
   const markers = []; // Create an array to hold the Leaflet marker objects
 
-  if (cctv.번호 === data.cctv_number && warning === data.risk_level) {
-    alertRef.current.innerHTML = `cctv 번호: ${data.cctv_number}`;
+  if (cctv.번호 === cctvdata) {
+    alertRef.current.innerHTML = `cctv 번호: ${cctvdata}`;
     alertRef.current.classList.add("show");
+    setTimeout(() => {
+      alertRef.current.classList.remove("show");
+    }, 5000);
     console.log("if");
     const redIcon = new L.Icon({
       iconUrl: require("../components/img/redcctv.png"), // URL for your custom red marker icon
@@ -37,7 +39,7 @@ export const handleResponseData = (
     // Apply custom CSS styles for the popup content
     const popupContent = `
         <div class="custom-popup">
-          <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
+          <p class="popup-title">CCTV 번호: ${cctvdata}</p>
           <img src=https://image.zdnet.co.kr/2023/07/21/enter72f35aebaa72d84db434a8b952117dff.jpg />
           <p>WGS84 경도: ${cctv.WGS84경도}</p>
           <p>WGS84 위도: ${cctv.WGS84위도}</p>

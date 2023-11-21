@@ -8,14 +8,33 @@
 # http://127.0.0.1:5001/find_safe_route?depart_x=126.73344&depart_y=37.52977&arrive_x=126.7428&arrive_y=37.53829
 from flask import Flask, request, Response, jsonify, make_response
 from flask_cors import CORS
+from flask_socketio import SocketIO, emit
 import requests
 import traceback
+import time
 import mysql.connector
 import json
 
 
 from distance import point_to_line_distance
 from distance import coordinate_to_meter
+
+
+
+
+app = Flask(__name__)
+CORS(app)  
+app.config['JSON_AS_ASCII'] = False
+socketio = SocketIO(cors_allowed_origins="*")  # Add Socket.IO to the app
+socketio.init_app(app) 
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+def send_signal():
+    while True:
+        time.sleep(10)
+        socketio.emit('signal', {'data': 0})
 
 def isCCTV_near(CCTV, nodes):
     point = [CCTV[12], CCTV[11]]
@@ -25,11 +44,6 @@ def isCCTV_near(CCTV, nodes):
         if distance_meter < 100:
             return True
     return False
-
-app = Flask(__name__)
-CORS(app)  
-app.config['JSON_AS_ASCII'] = False
-
 @app.route('/find_safe_route', methods=['GET'])
 def find_safe_route():
     try:
@@ -81,7 +95,7 @@ def send_cctv_number():
         
 
         response = {
-                  'cctv_number': 8321,
+                  'cctv_number': 8326,
                 'risk_level': "위험",
                 'content': "현재 13시50분 cctv에 칼부림 일어남",
                 'image': "https://image.news1.kr/system/photos/2023/7/21/6117093/article.jpg"
@@ -106,6 +120,8 @@ if __name__ == '__main__':
     #     database="safety_route"
     # )
     cursor = db_connection.cursor()
+    socketio.start_background_task(target=send_signal)
+    socketio.run(app, port=5001, debug=True) 
     app.run(host='0.0.0.0', port=5001)
     cursor.close()
     db_connection.close()

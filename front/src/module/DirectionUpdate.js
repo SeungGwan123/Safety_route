@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import socketIOClient from "socket.io-client";
 import axios from "axios";
 import RouteButton from "./RouteButton";
 import fasterRoute from "./fasterRoute";
@@ -21,6 +22,24 @@ const DirectionUpdate = ({
   setOsrmPolylines,
   setCCTVCircles,
 }) => {
+  // const [socketData, setSocketData] = useState(null);
+
+  // useEffect(() => {
+  //   const socket = socketIOClient("http://localhost:5001");
+
+  //   socket.on("connect", () => {
+  //     console.log("Connected to server");
+  //   });
+
+  //   socket.on("signal", (data) => {
+  //     // Store the received data in the state
+  //     setSocketData(data);
+  //   });
+
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
   return (
     <div className="nav-direction">
       <RouteButton
@@ -109,6 +128,7 @@ const DirectionUpdate = ({
                       alertRef,
                       response,
                       info
+                      //socketData
                     );
                   } else {
                     console.error("No routes found.");
