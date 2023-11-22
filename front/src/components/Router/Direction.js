@@ -8,7 +8,7 @@ import routeWalk from "../img/routewalk.png";
 import Map from "./Map";
 import Alert from "./Alert";
 import MenuBar from "./MenuBar";
-import DirectionUpdate from "../../module/\bDirectionUpdate";
+import DirectionUpdate from "../../module/DirectionUpdate";
 import { handleResponseData } from "../../module/HandleResponseData";
 const Nominatim_Base_Url = "https://nominatim.openstreetmap.org/search";
 

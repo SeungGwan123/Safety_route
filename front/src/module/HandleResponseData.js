@@ -22,7 +22,6 @@ export const handleResponseData = (
     setTimeout(() => {
       alertRef.current.classList.remove("show");
     }, 2000);
-    console.log("if");
     const redIcon = new L.Icon({
       iconUrl: require("../components/img/redcctv.png"), // URL for your custom red marker icon
       iconSize: [20, 24],
@@ -77,7 +76,6 @@ export const handleResponseData = (
 
     markers.push(redMarker); // Add the red marker to the array
   } else {
-    console.log("else");
     // Create a marker with the default icon
 
     // Create a custom popup content with HTML and CSS styles
