@@ -118,8 +118,7 @@ function CCTV() {
             }).addTo(mapRef.current);
 
             const popupContent = `
-            <b>번호:</b> ${cctv.id}<br>
-            <img src="http://192.168.174.122:8000/stream.mjpg" />
+            <b class="popup-title">번호: ${cctv.id}</b><br>
             <b>위치:</b> ${cctv.Area}<br>
             <b>전화번호:</b> ${cctv.call}<br>
             <b>설치일자:</b> ${cctv.install_date}<br>

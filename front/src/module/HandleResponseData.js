@@ -9,6 +9,11 @@ export const handleResponseData = (
   warning,
   cctvIcon
 ) => {
+  const regularMarker = L.marker(cctvLocation, {
+    icon: cctvIcon,
+  }).addTo(mapRef.current);
+  let redMarker;
+
   const markers = []; // Create an array to hold the Leaflet marker objects
 
   if (cctv.번호 === cctvdata) {
@@ -16,7 +21,7 @@ export const handleResponseData = (
     alertRef.current.classList.add("show");
     setTimeout(() => {
       alertRef.current.classList.remove("show");
-    }, 5000);
+    }, 2000);
     console.log("if");
     const redIcon = new L.Icon({
       iconUrl: require("../components/img/redcctv.png"), // URL for your custom red marker icon
@@ -25,9 +30,10 @@ export const handleResponseData = (
     });
 
     // Create a marker with the red icon
-    const redMarker = L.marker(cctvLocation, {
+    redMarker = L.marker(cctvLocation, {
       icon: redIcon,
     }).addTo(mapRef.current);
+    mapRef.current.removeLayer(regularMarker);
 
     L.circle(cctvLocation, {
       color: "red",
@@ -40,7 +46,6 @@ export const handleResponseData = (
     const popupContent = `
         <div class="custom-popup">
           <p class="popup-title">CCTV 번호: ${cctvdata}</p>
-          <img src=https://image.zdnet.co.kr/2023/07/21/enter72f35aebaa72d84db434a8b952117dff.jpg />
           <p>WGS84 경도: ${cctv.WGS84경도}</p>
           <p>WGS84 위도: ${cctv.WGS84위도}</p>
           <p>관리기관명: ${cctv.관리기관명}</p>
@@ -53,26 +58,32 @@ export const handleResponseData = (
           
         </div>
       `;
-
     // Add the custom popup to the marker
     redMarker.bindPopup(popupContent, {
       maxWidth: 350, // Set a maximum width for the popup
-      className: "custom-popup", // Add a custom CSS class to style the popup
+      className: "custom-popup",
+      // Add a custom CSS class to style the popup
+    });
+    redMarker.on("popupopen", function () {
+      // 팝업이 열릴 때 실행되는 함수
+
+      // 새로운 div를 만들어서 내용을 추가
+      var newDiv = document.createElement("div");
+      newDiv.innerHTML = "이것은 새로운 div입니다.";
+
+      // body에 새로운 div를 추가
+      document.body.appendChild(newDiv);
     });
 
     markers.push(redMarker); // Add the red marker to the array
   } else {
     console.log("else");
     // Create a marker with the default icon
-    const regularMarker = L.marker(cctvLocation, {
-      icon: cctvIcon,
-    }).addTo(mapRef.current);
 
     // Create a custom popup content with HTML and CSS styles
     const popupContent = `
         <div class="custom-popup">
           <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
-          <img src="http://192.168.174.122:8000/stream.mjpg" />
           <p>WGS84 경도: ${cctv.WGS84경도}</p>
           <p>WGS84 위도: ${cctv.WGS84위도}</p>
           <p>관리기관명: ${cctv.관리기관명}</p>
@@ -91,14 +102,16 @@ export const handleResponseData = (
       minWidth: 350, // Set a minimum width for the popup
       className: "custom-popup", // Add a custom CSS class to style the popup
     });
-
-    markers.push(regularMarker); // Add the regular marker to the array
+    markers.push(regularMarker);
+    if (redMarker) {
+      mapRef.current.removeLayer(redMarker);
+    } // Add the regular marker to the array
   }
 
   // Now, add the markers to the map
-  markers.forEach((marker) => {
-    mapRef.current.addLayer(marker);
-  });
+  if (markers.length > 0) {
+    mapRef.current.addLayer(markers[0]);
+  }
 
   return markers; // Return the marker objects if needed
 };

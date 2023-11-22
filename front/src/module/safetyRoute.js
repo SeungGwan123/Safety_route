@@ -3,7 +3,14 @@ import L from "leaflet";
 import { handleResponseData } from "./HandleResponseData";
 import socketIOClient from "socket.io-client";
 let globalSocket;
+let count = 0;
+const cleanup = () => {
+  if (globalSocket) {
+    globalSocket.disconnect();
+  }
 
+  // Additional cleanup logic if needed
+};
 const destinationIcon = new L.Icon({
   iconUrl: require("../components/img/flag.png"),
   iconSize: [30, 35],
@@ -19,7 +26,7 @@ const cctvIcon = new L.Icon({
   iconSize: [20, 24],
   iconAnchor: [5, 10],
 });
-const safetyRoute = (
+const safetyRoute = async (
   routes,
   startLat,
   startLon,
@@ -98,8 +105,12 @@ const safetyRoute = (
             });
           }
         );
+        if (count == 0) {
+          mapRef.current.setView([startLat, startLon], 15);
+          count = count + 1;
+        }
+        console.log(count);
 
-        mapRef.current.setView([startLat, startLon], 15);
         setCCTVCircles(cctvCircles);
 
         // Set the cctvCircles to state for rendering
@@ -128,7 +139,12 @@ const safetyRoute = (
 
     return socket;
   };
+  const cleanUpFunction = () => {
+    cleanup();
+    // Additional cleanup logic if needed
+  };
   console.log("hello", globalSocket);
   const socket = setupSocketConnection();
+  window.addEventListener("beforeunload", cleanUpFunction);
 };
 export default safetyRoute;
