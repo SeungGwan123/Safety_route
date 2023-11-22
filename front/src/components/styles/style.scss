@@ -1,0 +1,429 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Noto+Sans+KR:wght@300&family=Noto+Sans+Vithkuqi:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@500&display=swap');
+
+.main{
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    height: 100%;
+    background: #ffffff;
+}
+
+.menu {
+  position: fixed;
+  border-bottom: none;
+  display: flex;
+  left: 2%;
+  width: 350px;
+  overflow-y: hidden;
+  height: 12.5vh;
+  z-index: 9999;
+  justify-content: center;
+  top: 2vh;
+  background: #ffffff;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+}
+.custom-popup .leaflet-popup-content-wrapper {
+
+  font-size:12px;
+  line-height:24px;
+  /* 김구름님, */
+
+font-family: 'Acme';
+font-style: normal;
+font-weight: 400;
+
+
+
+/* snb color 2 */
+color: #000958;
+
+
+
+box-sizing: border-box;
+width: 380px;
+
+background: #FFFFFF;
+/* main color */
+border: 1px solid #AAB3FF;
+box-shadow: 0px 0px 25px 7px rgba(170, 179, 255, 0.3);
+border-radius: 16px;
+
+  }
+.popup-title{
+  font-size: 20px;
+  line-height: 0;
+}
+.custom-popup .leaflet-popup-content-wrapper a {
+  color:rgba(255,255,255,0.5);
+  }
+.custom-popup .leaflet-popup-tip-container {
+  width:30px;
+  height:15px;
+  }
+  
+  .custom-redpopup .leaflet-popup-content-wrapper {
+    background: #2c3e50;
+    color: #fff;
+    font-size: 12px;
+    line-height: 24px;
+  }
+  
+  .custom-redpopup .leaflet-popup-content-wrapper a {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .custom-redpopup .leaflet-popup-tip-container {
+    width: 30px;
+    height: 15px;
+  }
+  .custom-popup img{
+    width: 100%;
+    height: 180px;
+    transition: transform 0.3s ease-in-out;
+    border-radius: 10px;
+
+  }
+  .custom-popup img:hover {
+    /* 이미지 확대 애니메이션 */
+    transform: scale(1.1);
+}
+  
+
+
+
+
+
+
+  
+  
+ 
+  
+
+.alert {
+  position: fixed;
+  top: 10%;
+  right: 10px;
+  display: flex;
+  background: #e74c3c;
+  color: #fff;
+  border: 2px solid #811003;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999999;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s ease-in-out;
+  font-family: Arial, sans-serif;
+}
+
+.alert.show {
+  visibility: visible;
+  opacity: 1;
+}
+.menu-bar{
+  position: absolute;
+  display: flex;
+  width: 350px;
+  height: 5vh;
+  justify-content: center;
+  align-items: center;
+  top: 0%;
+  background: #ffffff;
+  z-index: 99999999999;
+  gap: 20px;
+
+
+}
+
+.logo{
+  position: relative;
+  top: 3%;
+  font-family: 'Playpen Sans', cursive;
+  color: #ed0303;
+  display: flex;
+  width: 130px;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  font-weight: bold;
+
+}
+.menu-button{
+  position: relative;
+  width: 20%;
+  display: flex;
+  list-style: none;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  font-size: 0.7rem;
+  border: 1px solid #258fff;
+  border-radius: 2px;
+  color: black;
+  text-decoration: none;
+
+}
+
+.menu-button-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+}
+.searchicon{
+  position: absolute;
+  top: 5px;
+}
+.menu-button :hover{
+  color: #bcbdbd;
+}
+
+.nav {
+  position: fixed;
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  height: 22vh;
+  top: 5.5%; /* Add this property to align it to the top */
+  left: 2%;
+
+}
+.nav-direction {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 350px;
+  background: #ffffff;
+  border-radius: 4px;
+  border: 1px solid #258fff;
+  border-top:none ;
+  height: 20vh;
+  top: 7%; /* Add this property to align it to the top */
+
+}
+/* Style for the info-cont */
+.info-cont {
+  position: absolute;
+  top: 101%;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: rgba(255, 255, 255, 0.9);
+  border-top: transparent;
+  border: 1px solid #a0afbf; /* Increase border width and change color */
+  border-radius: 10px; /* Increase border radius for a rounded look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+  display: flex;
+  justify-content: center;
+  text-align: left;
+  visibility: hidden;
+ /* Add more padding for better spacing */
+}
+.routeWalk{
+  position: absolute;
+  bottom: 20px;
+  width: 200px;
+  height: 60px;
+}
+
+/* Style for the info-content div */
+.info-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+/* Style for info-row */
+.info-row {
+  width: 100%;
+
+}
+
+/* Style for info-label (Distance and Duration labels) */
+.info-label {
+  font-weight: bold;
+  color: #258fff;
+  text-transform: uppercase; /* Convert text to uppercase for emphasis */
+  font-size: 15px; /* Adjust font size */
+  font-weight: bold;
+}
+
+/* Style for info-value (Distance and Duration values) */
+.info-value {
+  color: #333;
+  font-size: 16px; /* Adjust font size */
+  margin-left: 20px;
+  font-weight: bold;
+}
+
+.pd{
+  position: absolute;
+  bottom: 45px;
+  width: 50px;
+  left: 0;
+}
+.walk{
+  position: absolute;
+  left: 10%;
+}
+
+.input-address{
+  position: absolute;
+  width: 340px;
+  height: 46px;
+  border-radius: 3px;
+  background-color: #fff;
+  -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+  outline: none; /* Remove the outline */
+  border: 2px solid #258fff; /* Remove the border */
+  top: 2vh;
+}
+.start{
+  position: absolute;
+  top: 68px;
+  width: 232px;
+  height: 10%;
+  z-index: 99999999;
+  left:55px;
+  border: 1px solid #4dc857;
+  border-radius: 2px;
+
+}
+.end{
+  position: absolute;
+  width: 232px;
+  top: 90px;
+  left: 55px;
+  height: 10%;
+  border: 1px solid #ed0303;
+  border-radius: 2px;
+}
+.route-button {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 25px;
+  background-color: #4CAF50; /* 감탄 받을 수 있는 색상 */
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.route-button:hover {
+  background-color: #45A049; /* 호버 시 색상 변경 */
+}
+
+/* 선택적으로 버튼에 아이콘 추가하기 */
+.route-button::before {
+  content: "\f138"; /* 원하는 아이콘 유니코드 추가 */
+  font-family: FontAwesome; /* 폰트어썸 아이콘 폰트 사용 */
+  margin-right: 5px;
+}
+
+.routebtn{
+  position: absolute;
+  width: 100%;
+}
+.Search{
+position: absolute;
+top: 3.2vh;
+right: 5%;
+  background-image: url(../img/ico_search21x212.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  float: left;
+    width: 20px;
+    height: 20px;
+    margin: 5px 0;
+    border: 0 none;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+.weather {
+  position: fixed;
+  display: flex;
+  top: 15%;
+  left: 2%;
+  width: 348px;
+  height: 5%;
+  z-index: 999999;
+  border: 1px solid #258fff;
+  background-color: #fff; /* Add a white background color */
+  color: #333; /* Darken the text color */
+  font-size: 0.25em; /* Increase the font size for better readability */
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+  border-radius: 10px; /* Add rounded corners */
+}
+
+.weather p {
+  margin: 0; /* Remove default margin for paragraphs */
+  padding: 2px; /* Add some padding to the paragraphs */
+}
+.weather img {
+  width: 30px;
+  height: 30px;
+}
+
+.direction-tab1, .direction-tab2 {
+  position: absolute;
+  top: 12.5%;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #258fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.direction-tab1 {
+  left: 20%;
+  height: 20px;
+  background-color: #258fff;
+}
+.walk :hover{
+  color: gray;
+}
+
+.direction-tab2 {
+  right: 20%;
+  height: 20px;
+  justify-content: flex-end;
+}
+
+
+
