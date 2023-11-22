@@ -33,7 +33,7 @@ const DirectionUpdate = ({
 
   //   socket.on("signal", (data) => {
   //     // Store the received data in the state
-  //     setSocketData(data);
+  //     setSocketData(data.data);
   //   });
 
   //   return () => {
@@ -128,7 +128,6 @@ const DirectionUpdate = ({
                       alertRef,
                       response,
                       info
-                      //socketData
                     );
                   } else {
                     console.error("No routes found.");

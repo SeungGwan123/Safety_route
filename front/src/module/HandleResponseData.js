@@ -15,7 +15,6 @@ export const handleResponseData = (
   let redMarker;
 
   const markers = []; // Create an array to hold the Leaflet marker objects
-
   if (cctv.번호 === cctvdata) {
     alertRef.current.innerHTML = `cctv 번호: ${cctvdata}`;
     alertRef.current.classList.add("show");

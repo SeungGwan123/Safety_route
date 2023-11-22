@@ -8,8 +8,6 @@ const cleanup = () => {
   if (globalSocket) {
     globalSocket.disconnect();
   }
-
-  // Additional cleanup logic if needed
 };
 const destinationIcon = new L.Icon({
   iconUrl: require("../components/img/flag.png"),
@@ -26,6 +24,38 @@ const cctvIcon = new L.Icon({
   iconSize: [20, 24],
   iconAnchor: [5, 10],
 });
+const setupSocketConnection = (
+  cctv,
+  cctvLocation,
+  mapRef,
+  [startLat, startLon],
+  alertRef,
+  warning,
+  cctvIcon
+) => {
+  const socket = socketIOClient("http://localhost:5001");
+
+  socket.on("connect", () => {
+    console.log("Connected to server");
+  });
+
+  socket.on("signal", (data) => {
+    const cctvdata = data.data;
+    handleResponseData(
+      cctvdata,
+      cctv,
+      cctvLocation,
+      mapRef,
+      [startLat, startLon],
+      alertRef,
+      warning,
+      cctvIcon
+    );
+  });
+
+  return socket;
+};
+
 const safetyRoute = async (
   routes,
   startLat,
@@ -41,119 +71,77 @@ const safetyRoute = async (
   response,
   info
 ) => {
-  const setupSocketConnection = () => {
-    const startTime = new Date();
-    const socket = socketIOClient("http://localhost:5001");
+  cleanup(); // Clean up existing connections
 
-    // Replace with your Flask server address
+  const processedCctvNumbers = new Set(); // Set to keep track of processed cctv numbers
 
-    socket.on("connect", () => {
-      console.log("Connected to server");
-      const connectionTime = new Date() - startTime;
-      console.log(`연결하는 시간: ${connectionTime} ms`);
+  if (
+    response.data.data.near_cctv &&
+    Array.isArray(response.data.data.near_cctv)
+  ) {
+    const maxCctvIndex = response.data.data.near_cctv.reduce(
+      (maxIndex, set, currentIndex) => {
+        return set.length > response.data.data.near_cctv[maxIndex].length
+          ? currentIndex
+          : maxIndex;
+      },
+      0
+    );
+
+    const selectedRoute = routes[maxCctvIndex];
+    const polylines = selectedRoute.geometry;
+    const distance = selectedRoute.distance;
+    const duration = selectedRoute.duration;
+
+    setOsrmPolylines([polylines]);
+
+    response.data.data.near_cctv[maxCctvIndex].forEach((cctv) => {
+      if (cctv.WGS84경도 && !processedCctvNumbers.has(cctv.번호)) {
+        processedCctvNumbers.add(cctv.번호);
+
+        const latitude = parseFloat(cctv.WGS84위도);
+        const longitude = parseFloat(cctv.WGS84경도);
+        const cctvLocation = [latitude, longitude];
+        const warning = "위험";
+
+        const socket = setupSocketConnection(
+          cctv,
+          cctvLocation,
+          mapRef,
+          [startLat, startLon],
+          alertRef,
+          warning,
+          cctvIcon
+        );
+
+        globalSocket = socket;
+      }
     });
 
-    while (true) {
-      socket.on("signal", (data) => {
-        console.log("Received signal from server:", data);
-        const signalReceivedTime = new Date() - startTime;
-        console.log(`응답받는 시간: ${signalReceivedTime} ms`);
-        let cctvdata = data.data;
-        console.log("hello", cctvdata);
-        let maxCctvIndex = 0;
-        let maxCctvLength = response.data.data.near_cctv[0].length;
+    setDistance((distance / 1000).toFixed(2));
+    setDuration(
+      `${Math.floor(duration / 3600)} 시간 ${Math.floor(
+        (duration % 3600) / 60
+      )} 분`
+    );
 
-        for (let i = 1; i < response.data.data.near_cctv.length; i++) {
-          if (response.data.data.near_cctv[i].length > maxCctvLength) {
-            maxCctvLength = response.data.data.near_cctv[i].length;
-            maxCctvIndex = i;
-          }
-        }
-
-        // Use the index to select the corresponding OSRM route
-        const selectedRoute = routes[maxCctvIndex];
-
-        const polylines = selectedRoute.geometry;
-        const distance = selectedRoute.distance; // Distance in meters
-        const duration = selectedRoute.duration;
-        setOsrmPolylines([polylines]);
-        const selectedCctvSet = response.data.data.near_cctv[maxCctvIndex];
-        if (
-          response.data.data.near_cctv &&
-          Array.isArray(response.data.data.near_cctv)
-        ) {
-          console.log("Received CCTV Data:", response.data.data.near_cctv);
-          // Now, you can set the CCTV data to state
-          const cctvCircles = response.data.data.near_cctv.map(
-            (set, setIndex) => {
-              return selectedCctvSet.map((cctv, index) => {
-                if (cctv.WGS84경도) {
-                  const latitude = parseFloat(cctv.WGS84위도);
-                  const longitude = parseFloat(cctv.WGS84경도);
-                  const cctvLocation = [latitude, longitude];
-                  const warning = "위험";
-                  const cctvInfo = {
-                    cctv_number: cctv.번호,
-                  };
-                  handleResponseData(
-                    cctvdata,
-                    cctv,
-                    cctvLocation,
-                    mapRef,
-                    [startLat, startLon],
-                    alertRef,
-                    warning,
-                    cctvIcon
-                  );
-                } else {
-                  return null;
-                }
-              });
-            }
-          );
-          if (count == 0) {
-            mapRef.current.setView([startLat, startLon], 15);
-            count = count + 1;
-          }
-          console.log(count);
-
-          setCCTVCircles(cctvCircles);
-
-          // Set the cctvCircles to state for rendering
-
-          info.style.visibility = "visible";
-          const km = (distance / 1000).toFixed(2); // 미터를 킬로미터로 변환하여 소수점 2자리까지 표시
-          const durationInSeconds = duration; // 이미 초 단위로 표시되어 있으므로 변환할 필요 없음
-          const hours = Math.floor(durationInSeconds / 3600); // 초를 시간으로 변환
-          const minutes = Math.floor((durationInSeconds % 3600) / 60); // 초를 분으로 변환
-          const hr = `${hours} 시간 ${minutes} 분`;
-
-          setDistance(km);
-          setDuration(hr);
-          const startMarker = L.marker([startLat, startLon], {
-            icon: startIcon,
-          }).addTo(mapRef.current);
-          const endMarker = L.marker([endLat, endLon], {
-            icon: destinationIcon,
-          }).addTo(mapRef.current);
-
-          startMarker.bindPopup("출발지");
-          endMarker.bindPopup("도착지");
-        }
-        console.log("전체 응답 시간:", new Date() - startTime, "ms");
-        socket.off("signal");
-      });
-      globalSocket = socket;
-
-      return socket;
+    if (count === 0) {
+      mapRef.current.setView([startLat, startLon], 15);
+      count += 1;
     }
-  };
-  const cleanUpFunction = () => {
-    cleanup();
-    // Additional cleanup logic if needed
-  };
-  console.log("hello", globalSocket);
-  const socket = setupSocketConnection();
-  window.addEventListener("beforeunload", cleanUpFunction);
+
+    info.style.visibility = "visible";
+
+    const startMarker = L.marker([startLat, startLon], {
+      icon: startIcon,
+    }).addTo(mapRef.current);
+    const endMarker = L.marker([endLat, endLon], {
+      icon: destinationIcon,
+    }).addTo(mapRef.current);
+
+    startMarker.bindPopup("출발지");
+    endMarker.bindPopup("도착지");
+  }
 };
+
 export default safetyRoute;
