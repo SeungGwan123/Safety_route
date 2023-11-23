@@ -2,3 +2,7 @@ myenv
 .editorconfig
 .vscode
 __pycache__
+selfmade_dataset
+capture_picamera
+yolov5/runs/
+static/detected

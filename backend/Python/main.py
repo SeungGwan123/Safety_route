@@ -1,12 +1,13 @@
-# test_env.py 먼저 확인
+# practice/test.ipynb 먼저 확인
 # > myenv\Scripts\activate
-# > python main.py
+# > python main.
+# > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img
 
 # 인천대-> CGV
 # http://127.0.0.1:5001/find_safe_route?depart_x=126.63486&depart_y=37.37692&arrive_x=126.64251&arrive_y=37.38308
 # 계양구
 # http://127.0.0.1:5001/find_safe_route?depart_x=126.73344&depart_y=37.52977&arrive_x=126.7428&arrive_y=37.53829
-from flask import Flask, request, Response, jsonify, make_response
+from flask import Flask, request, Response, jsonify, make_response, render_template
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import requests
@@ -15,26 +16,23 @@ import time
 import mysql.connector
 import json
 
-
 from distance import point_to_line_distance
 from distance import coordinate_to_meter
-
-
-
 
 app = Flask(__name__)
 CORS(app)  
 app.config['JSON_AS_ASCII'] = False
 socketio = SocketIO(cors_allowed_origins="*")  # Add Socket.IO to the app
-socketio.init_app(app) 
-@socketio.on('connect')
-def handle_connect():
-    print('Client connected')
+socketio.init_app(app)
 
-def send_signal():
-    while True:
-        time.sleep(10)
-        socketio.emit('signal', {'data': 0})
+# @socketio.on('connect')
+# def handle_connect():
+#     print('soketio connected')
+
+def send_signal(dt):
+    detected_image_path = "localhost:5001/detected/"+str(dt)+".jpg"
+    socketio.emit('signal', {'data': {'data': 8326, 'image':detected_image_path}})
+
 
 def isCCTV_near(CCTV, nodes):
     point = [CCTV[12], CCTV[11]]
@@ -44,6 +42,8 @@ def isCCTV_near(CCTV, nodes):
         if distance_meter < 100:
             return True
     return False
+
+# 안전 경로 길찾기
 @app.route('/find_safe_route', methods=['GET'])
 def find_safe_route():
     try:
@@ -83,44 +83,57 @@ def find_safe_route():
                             tmp_cctv[near_cctv_label[j]] = CCTV[j]
                         near_cctv[i].append(tmp_cctv)
             # response 보내기
-                        response = {'code': 200, 'data': {'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}}
+            response = {'code': 200, 'data': {'OSRM_response': OSRM_response.json(), 'near_cctv': near_cctv}}
             return make_response(json.dumps(response, ensure_ascii=False))
     except Exception as e:
         err = traceback.format_exc()
         response = {'code': 400, 'message': err}
         return make_response(json.dumps(response, ensure_ascii=False))
+
+# 칼 감지
+@app.route('/knife_detected', methods=['GET'])
+def knife_detected():
+    detected_time = request.args.get('detected_time')
+    # detected_time = time.time()
+    send_signal(detected_time)
+    return 'knife_detected at ' + str(detected_time)
+
+# detected 이미지
+@app.route('/detected/<filename>')
+def detected(filename):
+    return render_template('detected.html', filename=filename)
+
 @app.route('/send_cctv_number', methods=['POST'])
 def send_cctv_number():
     try:
-        
-
         response = {
                   'cctv_number': 8326,
                 'risk_level': "위험",
                 'content': "현재 13시50분 cctv에 칼부림 일어남",
                 'image': "https://image.news1.kr/system/photos/2023/7/21/6117093/article.jpg"
          }
-
         return make_response(json.dumps(response, ensure_ascii=False))
     except Exception as e:
         err = traceback.format_exc()
         response = {'code': 400, 'message': err}
         return make_response(json.dumps(response, ensure_ascii=False))
+
+
 if __name__ == '__main__':
-    db_connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="tkrhdrhkdduf",
-        database="safety_route"
-    )
     # db_connection = mysql.connector.connect(
     #     host="localhost",
     #     user="root",
-    #     password="root",
+    #     password="tkrhdrhkdduf",
     #     database="safety_route"
     # )
+    db_connection = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="root",
+        database="safety_route"
+    )
     cursor = db_connection.cursor()
-    socketio.start_background_task(target=send_signal)
+    # socketio.start_background_task(target=send_signal)
     socketio.run(app, port=5001, debug=True) 
     app.run(host='0.0.0.0', port=5001)
     cursor.close()
