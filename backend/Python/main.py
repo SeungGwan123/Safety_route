@@ -1,6 +1,6 @@
 # practice/test.ipynb 먼저 확인
 # > myenv\Scripts\activate
-# > python main.
+# > python main.py
 # > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img
 
 # 인천대-> CGV
