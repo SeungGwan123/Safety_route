@@ -1,14 +1,8 @@
 import axios from "axios";
 import L from "leaflet";
 import { handleResponseData } from "./HandleResponseData";
-import socketIOClient from "socket.io-client";
-let globalSocket;
 let count = 0;
-const cleanup = () => {
-  if (globalSocket) {
-    globalSocket.disconnect();
-  }
-};
+
 const destinationIcon = new L.Icon({
   iconUrl: require("../components/img/flag.png"),
   iconSize: [30, 35],
@@ -24,37 +18,6 @@ const cctvIcon = new L.Icon({
   iconSize: [20, 24],
   iconAnchor: [5, 10],
 });
-const setupSocketConnection = (
-  cctv,
-  cctvLocation,
-  mapRef,
-  [startLat, startLon],
-  alertRef,
-  warning,
-  cctvIcon
-) => {
-  const socket = socketIOClient("http://localhost:5001");
-
-  socket.on("connect", () => {
-    console.log("Connected to server");
-  });
-
-  socket.on("signal", (data) => {
-    const cctvdata = data.data;
-    handleResponseData(
-      cctvdata,
-      cctv,
-      cctvLocation,
-      mapRef,
-      [startLat, startLon],
-      alertRef,
-      warning,
-      cctvIcon
-    );
-  });
-
-  return socket;
-};
 
 const safetyRoute = async (
   routes,
@@ -71,8 +34,6 @@ const safetyRoute = async (
   response,
   info
 ) => {
-  cleanup(); // Clean up existing connections
-
   const processedCctvNumbers = new Set(); // Set to keep track of processed cctv numbers
 
   if (
@@ -104,17 +65,7 @@ const safetyRoute = async (
         const cctvLocation = [latitude, longitude];
         const warning = "위험";
 
-        const socket = setupSocketConnection(
-          cctv,
-          cctvLocation,
-          mapRef,
-          [startLat, startLon],
-          alertRef,
-          warning,
-          cctvIcon
-        );
-
-        globalSocket = socket;
+        handleResponseData(cctv, cctvLocation, mapRef, cctvIcon, alertRef);
       }
     });
 

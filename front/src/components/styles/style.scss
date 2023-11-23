@@ -424,6 +424,44 @@ right: 5%;
   height: 20px;
   justify-content: flex-end;
 }
+.popup-div{
+  position: absolute;
+  font-size:12px;
+  line-height:24px;
+  margin-left: 50vw;
+  margin-top: 10vh;
+  /* 김구름님, */
+  z-index: 999999;
+  font-family: 'Acme';
+  font-style: normal;
+  font-weight: 400;
+  /* snb color 2 */
+  color: #000958;
+  box-sizing: border-box;
+  width: 380px;
+  height: 380px;
 
+  background: #FFFFFF;
+  /* main color */
+  border: 1px solid #AAB3FF;
+  border-radius: 16px;
+}
+.alertMessage{
+  position: absolute;
+  margin-left: 22.5px;
+  display: flex;
+  flex-direction: column;
+  background: #e74c3c;
+  color: #fff;
+  border: 2px solid #811003;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  width: 300px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
 
 
