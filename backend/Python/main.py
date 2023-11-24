@@ -16,6 +16,8 @@ import time
 import mysql.connector
 import json
 
+detected_time, detected_cctv, detected_image_path = 0, 0, ''
+
 from distance import point_to_line_distance
 from distance import coordinate_to_meter
 
@@ -25,13 +27,15 @@ app.config['JSON_AS_ASCII'] = False
 socketio = SocketIO(cors_allowed_origins="*")  # Add Socket.IO to the app
 socketio.init_app(app)
 
-# @socketio.on('connect')
-# def handle_connect():
-#     print('soketio connected')
+"""
+# socket connect 알림
+@socketio.on('connect')
+def handle_connect():
+    print('soketio connected')
+"""
 
-def send_signal(dt):
-    detected_image_path = "localhost:5001/detected/"+str(dt)+".jpg"
-    socketio.emit('signal', {'data': {'warning': '위험', 'data': 8326, 'image':detected_image_path}})
+def send_signal(detected_time, detected_cctv, detected_image_path):
+    socketio.emit('signal', {'data': {'warning': '위험', 'data': detected_cctv, 'image':detected_image_path}})
 
 
 def isCCTV_near(CCTV, nodes):
@@ -93,16 +97,30 @@ def find_safe_route():
 # 칼 감지
 @app.route('/knife_detected', methods=['GET'])
 def knife_detected():
-    detected_time = request.args.get('detected_time')
-    # detected_time = time.time()
-    send_signal(detected_time)
-    return 'knife_detected at ' + str(detected_time)
+    global detected_time, detected_cctv, detected_image_path
+    detected_time = int(request.args.get('detected_time'))   # 카메라 없을 시 detected_time = time.time()
+    detected_cctv = 8326
+    detected_image_path = "http://localhost:5001/static/detected/"+str(detected_time)+".jpg"
+    send_signal(detected_time, detected_cctv, detected_image_path)
+    return 'knife_detected at ' + str(detected_time) + " " + str(detected_cctv) + " " + detected_image_path
 
-# detected 이미지
+# detected 이미지 경로
 @app.route('/detected/<filename>')
 def detected(filename):
     return render_template('detected.html', filename=filename)
 
+# 가장 최근 위험 상황
+@app.route('/get_latest_warning', methods=['GET'])
+def get_latest_warning():
+    latest_warning = [detected_time, detected_cctv, detected_image_path]
+    if time.time() - latest_warning[0] < 60*60:  # 가장 최근 위험 발생 시간이 현재로부터 1시간 이내라면
+        response = {'code': 200, 'data': {'latest_warning': latest_warning}}
+    else:
+        response = {'code': 400}
+    return make_response(json.dumps(response, ensure_ascii=False))
+
+"""
+# 시연 영상 용 임시
 @app.route('/send_cctv_number', methods=['POST'])
 def send_cctv_number():
     try:
@@ -117,7 +135,7 @@ def send_cctv_number():
         err = traceback.format_exc()
         response = {'code': 400, 'message': err}
         return make_response(json.dumps(response, ensure_ascii=False))
-
+"""
 
 if __name__ == '__main__':
     # db_connection = mysql.connector.connect(
