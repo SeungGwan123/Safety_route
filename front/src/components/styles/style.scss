@@ -66,13 +66,37 @@ border-radius: 16px;
   width:30px;
   height:15px;
   }
+  .warning-popup .leaflet-popup-content-wrapper {
+
+    font-size:12px;
+    line-height:24px;
+    /* 김구름님, */
+    margin-left: 760px;
+  font-family: 'Acme';
+  font-style: normal;
+  font-weight: 400;
   
-  .custom-redpopup .leaflet-popup-content-wrapper {
-    background: #2c3e50;
-    color: #fff;
-    font-size: 12px;
-    line-height: 24px;
-  }
+  
+  
+  /* snb color 2 */
+  color: #000958;
+  
+  
+  
+  box-sizing: border-box;
+  width: 380px;
+  height: 360px;
+  
+  background: #FFFFFF;
+  /* main color */
+  border: 1px solid #AAB3FF;
+  box-shadow: 0px 0px 25px 7px rgba(170, 179, 255, 0.3);
+  border-radius: 16px;
+  
+    }
+    .warning-popup .leaflet-popup-tip-container {
+      display: none;
+      }
   
   .custom-redpopup .leaflet-popup-content-wrapper a {
     color: rgba(255, 255, 255, 0.5);

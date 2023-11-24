@@ -31,7 +31,7 @@ socketio.init_app(app)
 
 def send_signal(dt):
     detected_image_path = "localhost:5001/detected/"+str(dt)+".jpg"
-    socketio.emit('signal', {'data': {'data': 8326, 'image':detected_image_path}})
+    socketio.emit('signal', {'data': {'warning': '위험', 'data': 8326, 'image':detected_image_path}})
 
 
 def isCCTV_near(CCTV, nodes):
