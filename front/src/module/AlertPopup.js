@@ -1,10 +1,19 @@
 import L from "leaflet";
+import axios from "axios";
 export const AlertPopup = (redMarker, mapRef, imagePath) => {
+  const response = axios.get("http://127.0.0.1:5001/get_latest_warning");
+  const data = response.data;
+  console.log(data);
+  const time = data.time_id;
+  const cctvid = data.cctv_id;
+  const image = data.image_url;
+  console.log(imagePath);
   // 팝업에 대한 div를 저장할 변수
   var popup = null;
   redMarker.on("popupopen", function () {
     // 팝업이 열릴 때마다 기존의 팝업 div를 생성하고 스타일을 설정
-    var popupContent = `<img src="${imagePath}"> </img>`;
+    console.log("imagePath:", imagePath);
+    var popupContent = `<img src="${image}"> </img>`;
     popup = L.popup({
       content: popupContent,
       className: "warning-popup", // Add your custom class here
