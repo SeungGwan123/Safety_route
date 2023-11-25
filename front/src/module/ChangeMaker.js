@@ -1,7 +1,7 @@
-import L from "leaflet";
 import socketIOClient from "socket.io-client";
 import { Alert } from "./Alert";
 import axios from "axios";
+import { previousAlert } from "./previousAlert";
 // Create a socket instance outside the function
 const socket = socketIOClient("http://localhost:5001");
 
@@ -18,10 +18,50 @@ export const ChangeMarker = (
   socketInstance // Pass the socket instance as an argument
 ) => {
   redMarker.remove();
+  const markers = [];
+
+  cctv.번호 = 8326;
   axios
     .get("http://127.0.0.1:5001/get_latest_warning")
     .then((response) => {
-      const warningdata = response.data;
+      const warningdata = response.data.data;
+      const prevwarn = "위험";
+      if (warningdata != null) {
+        const popupContent = `
+        <div class="custom-popup">
+          <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
+          <p>WGS84 경도: ${cctv.WGS84경도}</p>
+          <p>WGS84 위도: ${cctv.WGS84위도}</p>
+          <p>관리기관명: ${cctv.관리기관명}</p>
+          <p>설치목적: ${cctv.설치목적}</p>
+          <p>설치연월: ${cctv.설치연월}</p>
+          <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
+          <p>촬영방면정보: ${cctv.촬영방면정보}</p>
+          <p>카메라대수: ${cctv.카메라대수}</p>
+          <p>카메라화소: ${cctv.카메라화소}</p>
+          
+        </div>
+      `;
+        previousAlert(
+          warningdata.latest_warning[1],
+          redMarker,
+          mapRef,
+          warningdata.latest_warning[2],
+          prevwarn
+        );
+
+        redMarker.bindPopup(popupContent, {
+          maxWidth: 350,
+          className: "custom-popup",
+        });
+        markers.push(redMarker);
+
+        // Now, add the markers to the map
+        if (markers.length > 0) {
+          mapRef.current.addLayer(markers[0]);
+        }
+      }
+      console.log();
       const setupSocketConnection = () => {
         // Check if the socket connection has already been set up
         if (socketConnectionSetup) {
@@ -44,9 +84,10 @@ export const ChangeMarker = (
             console.log("Received Warning:", receivedWarning);
             console.log("Image Path:", imagePath);
 
-            const markers = [];
-            cctv.번호 = 8326;
             if (receivedWarning === "위험") {
+              if (markers.length > 0) {
+                mapRef.current.removeLayer(markers[0]);
+              }
               console.log(cctv.번호);
               Alert(
                 cctvdata.data,

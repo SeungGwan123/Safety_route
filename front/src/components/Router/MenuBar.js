@@ -30,7 +30,7 @@ const MenuBar = () => {
     if (path === "/direction") {
       navigate("/direction");
       window.location.reload();
-    }
+    } 
   };
 
   return (
