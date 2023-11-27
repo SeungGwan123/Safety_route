@@ -98,7 +98,8 @@ def find_safe_route():
 @app.route('/knife_detected', methods=['GET'])
 def knife_detected():
     global detected_time, detected_cctv, detected_image_path
-    detected_time = int(request.args.get('detected_time'))   # 카메라 없을 시 detected_time = time.time()
+    detected_time = int(request.args.get('detected_time'))   # 카메라 없을 시
+    #detected_time = time.time()
     detected_cctv = 8326
     detected_image_path = "http://localhost:5001/static/detected/"+str(detected_time)+".jpg"
     send_signal(detected_time, detected_cctv, detected_image_path)
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     db_connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root",
+        password="tmdrhks123",
         database="safety_route"
     )
     cursor = db_connection.cursor()

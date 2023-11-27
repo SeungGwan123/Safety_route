@@ -1,8 +1,10 @@
 # Safety_route\backend\Python > git clone https://github.com/ultralytics/yolov5.git
 # yolov5 폴더에 my_detect.py 포함시키기
+# Python 폴더에 static\detected 폴더가 있어야 이미지 저장이 된다.
 # Safety_route\backend\Python > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img --conf-thres 0.75
 import requests
 import time
+
 main_flask_url = "http://127.0.0.1:5001/knife_detected"
 signal_stack = 0
 last_detected_time = time.time()
@@ -235,7 +237,6 @@ def run(
                         vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                     vid_writer[i].write(im0)
 
-        
         # !!!!!!!!!!!!!!!!!!!! knife 감지 !!!!!!!!!!!!!!!!!!!!
         if len(det):
             global signal_stack
@@ -243,19 +244,19 @@ def run(
             detected_time = time.time()
             if detected_time - last_detected_time < 1:  # 지난 칼 감지 후 1초 이내에 칼 감지가 됐다면
                 signal_stack += 1
-                LOGGER.info('detected_time: '+ str(detected_time) +'\tsignal_stack: ' + str(signal_stack))
-                if signal_stack >= 5:   # 5번 이상 감지됐다면
+                LOGGER.info('detected_time: ' + str(detected_time) + '\tsignal_stack: ' + str(signal_stack))
+                if signal_stack >= 10:  # 5번 이상 감지됐다면
                     t = str(int(detected_time))
-                    detected_path = 'static/detected/'+t+'.jpg'
+                    detected_path = 'static/detected/' + t + '.jpg'
                     print(detected_path)
                     cv2.imwrite(detected_path, im0)
-                    a = requests.get(main_flask_url, {'code': 1, 'detected_time': t})   # main flask로 신호 보냄
+                    a = requests.get(main_flask_url, {'code': 1, 'detected_time': t})  # main flask로 신호 보냄
                     signal_stack = 0
-            else: # 지난 칼 감지보다 1초가 지났다면
+            else:  # 지난 칼 감지보다 1초가 지났다면
                 signal_stack = 1
-                LOGGER.info('detected_time: '+ str(detected_time) +'\tsignal_stack: ' + str(signal_stack))
+                LOGGER.info('detected_time: ' + str(detected_time) + '\tsignal_stack: ' + str(signal_stack))
             last_detected_time = detected_time  # 지난 칼 감지 시간 업데이트
-        
+
         # Print time (inference-only) 
         # LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
 
