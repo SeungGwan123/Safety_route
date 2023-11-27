@@ -22,24 +22,6 @@ const DirectionUpdate = ({
   setOsrmPolylines,
   setCCTVCircles,
 }) => {
-  // const [socketData, setSocketData] = useState(null);
-
-  // useEffect(() => {
-  //   const socket = socketIOClient("http://localhost:5001");
-
-  //   socket.on("connect", () => {
-  //     console.log("Connected to server");
-  //   });
-
-  //   socket.on("signal", (data) => {
-  //     // Store the received data in the state
-  //     setSocketData(data.data);
-  //   });
-
-  //   return () => {
-  //     socket.disconnect();
-  //   };
-  // }, []);
   return (
     <div className="nav-direction">
       <RouteButton
@@ -95,7 +77,6 @@ const DirectionUpdate = ({
                 const routes = response.data.data.OSRM_response.routes;
                 console.log(response.data.data);
                 if (selectedTab === "도보경로") {
-                  // Handle when the "도보경로" tab is selected
                   fasterRoute({
                     setOsrmPolylines,
                     mapRef,
@@ -110,9 +91,6 @@ const DirectionUpdate = ({
                     info,
                   });
                 } else {
-                  // Handle when the "안심경로" tab is selected
-                  // ... Your existing code ...
-
                   if (routes.length > 0) {
                     safetyRoute(
                       routes,

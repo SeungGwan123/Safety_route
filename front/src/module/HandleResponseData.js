@@ -15,9 +15,7 @@ export const handleResponseData = (
     iconSize: [20, 24],
     iconAnchor: [10, 12], // Adjust the anchor point if necessary
   });
-  const redMarker = L.marker([37.44788, 126.69263], {
-    icon: redIcon,
-  }).addTo(mapRef.current);
+
   const markers = [];
   const popupContent = `
         <div class="custom-popup">
@@ -47,7 +45,7 @@ export const handleResponseData = (
     mapRef.current.addLayer(markers[0]);
   }
 
-  ChangeMarker(cctvLocation, mapRef, cctv, regularMarker, alertRef, redMarker);
+  ChangeMarker(cctvLocation, mapRef, cctv, regularMarker, alertRef, redIcon);
 
   return markers; // Return the marker objects if needed
 };

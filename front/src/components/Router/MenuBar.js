@@ -3,16 +3,33 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
+/* Rectangle 75 */
+
+// position: absolute;
+// width: 160px;
+// height: 45px;
+// left: 658px;
+// top: 550px;
+
+// /* main color */
+// background: #AAB3FF;
+// box-shadow: 1px 2px 4px rgba(82, 91, 159, 0.2);
+// border-radius: 30px;
 
 const menuItems = [
-  { path: "/", label: "검색", image: homeImage, borderColor: "#258fff" },
+  {
+    path: "/",
+    label: "검색",
+    image: homeImage,
+    borderColor: "#258fff",
+  },
   {
     path: "/direction",
     label: "길찾기",
     image: routeImage,
     borderColor: "#03c75a",
   },
-  { path: "/cctv", label: "CCTV", image: cctvImage, borderColor: "#a0adb2" },
+  { path: "/cctv", label: "CCTV", image: cctvImage, borderColor: "#fcb0b0" },
 ];
 
 const MenuBar = () => {
@@ -30,7 +47,7 @@ const MenuBar = () => {
     if (path === "/direction") {
       navigate("/direction");
       window.location.reload();
-    } 
+    }
   };
 
   return (
@@ -44,7 +61,7 @@ const MenuBar = () => {
           onClick={() => handleButtonClick(item.path)}
           style={{
             borderColor: item.borderColor,
-            background: activeLink === item.path ? "#e8e8ea" : "#ffffff",
+            background: activeLink === item.path ? "#e6f4f1" : "#ffffff",
           }}
         >
           <img src={item.image} alt={item.label} width="20" height="20" />

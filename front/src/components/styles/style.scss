@@ -101,7 +101,42 @@ border-radius: 16px;
       .warning-popup img {
         margin-bottom: 5px; // Adjust the spacing as needed
       }
-  
+      .warning-popup1 .leaflet-popup-content-wrapper {
+
+        font-size:12px;
+        line-height:24px;
+        /* 김구름님, */
+        margin-left: 815px;
+        margin-bottom: -28px;
+      font-family: 'Acme';
+      font-style: normal;
+      font-weight: 400;
+      
+      
+      
+      /* snb color 2 */
+      color: #000958;
+      display: flex;
+      flex-direction: column;
+      
+      
+      
+      box-sizing: border-box;
+      width: 380px;
+      height: 360px;
+      
+      background: #FFFFFF;
+      border: none;
+    
+      
+        }
+        .warning-popup1 .leaflet-popup-tip-container {
+          display: none;
+         
+          }
+          .warning-popup1 img {
+            margin-bottom: 5px; // Adjust the spacing as needed
+          }
   .custom-redpopup .leaflet-popup-content-wrapper a {
     color: rgba(255, 255, 255, 0.5);
   }
@@ -209,7 +244,9 @@ border-radius: 16px;
   top: 0%;
   background: #ffffff;
   z-index: 99999999999;
-  gap: 20px;
+  gap: 15px;
+  margin-right: 15px;
+  margin-left: 5px;
 
 
 }
@@ -218,7 +255,7 @@ border-radius: 16px;
   position: relative;
   top: 3%;
   font-family: 'Playpen Sans', cursive;
-  color: #ed0303;
+  color: #ff7f00;
   display: flex;
   width: 130px;
   justify-content: center;
@@ -227,21 +264,19 @@ border-radius: 16px;
   font-weight: bold;
 
 }
-.menu-button{
+.menu-button {
   position: relative;
-  width: 20%;
+  width: 20%; /* Adjust width as needed */
+; /* Adjust height as needed */
   display: flex;
-  list-style: none;
-  background: white;
-  justify-content: center;
   align-items: center;
-  height: 30px;
-  font-size: 0.7rem;
-  border: 1px solid #258fff;
-  border-radius: 2px;
-  color: black;
+  justify-content: center;
+  font-size: 0.65rem; /* Adjust font size as needed */
+  border: 2px solid #258fff;
+  border-radius: 5px;
+  background-color: #258fff;
   text-decoration: none;
-
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .menu-button-content {
@@ -267,24 +302,32 @@ border-radius: 16px;
   align-items: center;
   width: 350px;
   height: 22vh;
+  border-radius: 50px;
   top: 5.5%; /* Add this property to align it to the top */
   left: 2%;
 
 }
 .nav-direction {
   position: fixed;
+  top: 8%;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 350px;
-  background: #ffffff;
-  border-radius: 4px;
-  border: 1px solid #258fff;
-  border-top:none ;
   height: 20vh;
-  top: 7%; /* Add this property to align it to the top */
-
+  background: #ffffff;
+  border: 1px solid #AAB3FF;
+  border-radius: 8px; /* Increased border-radius for a smoother look */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
 }
+
+/* You can add additional styles for child elements if needed */
+.nav-direction h1 {
+  color: #333; /* Example style for text color */
+  font-size: 18px; /* Example style for font size */
+  /* Add more styles as needed */
+}
+
 /* Style for the info-cont */
 .info-cont {
   position: absolute;
@@ -358,12 +401,20 @@ border-radius: 16px;
   height: 46px;
   border-radius: 3px;
   background-color: #fff;
-  -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
-  -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
-  box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
   outline: none; /* Remove the outline */
-  border: 2px solid #258fff; /* Remove the border */
   top: 2vh;
+  /* Rectangle 51 */
+
+box-sizing: border-box;
+
+
+
+background: #FFFFFF;
+/* main color */
+border: 2px solid #AAB3FF;
+box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+border-radius: 16px;
+
 }
 .start{
   position: absolute;
@@ -372,7 +423,7 @@ border-radius: 16px;
   height: 10%;
   z-index: 99999999;
   left:55px;
-  border: 1px solid #4dc857;
+  border: 1px solid #72cc82;
   border-radius: 2px;
 
 }
@@ -382,7 +433,8 @@ border-radius: 16px;
   top: 90px;
   left: 55px;
   height: 10%;
-  border: 1px solid #ed0303;
+  border: 1px solid #FFB3B3;
+  ;
   border-radius: 2px;
 }
 .route-button {
@@ -392,28 +444,24 @@ border-radius: 16px;
   transform: translateX(-50%);
   width: 100px;
   height: 25px;
-  background-color: #4CAF50; /* 감탄 받을 수 있는 색상 */
   color: #fff;
   border: none;
-  border-radius: 20px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 약간의 그림자 효과 */
-  transition: background-color 0.3s, color 0.3s;
+  /* Rectangle 53 */
+
+/* snb color 2 */
+background: #fcb0b0;
+border-radius: 16px;
+
 }
 
 .route-button:hover {
-  background-color: #45A049; /* 호버 시 색상 변경 */
+  background-color: #72cc82; /* 호버 시 색상 변경 */
 }
 
 /* 선택적으로 버튼에 아이콘 추가하기 */
-.route-button::before {
-  content: "\f138"; /* 원하는 아이콘 유니코드 추가 */
-  font-family: FontAwesome; /* 폰트어썸 아이콘 폰트 사용 */
-  margin-right: 5px;
-}
-
 .routebtn{
   position: absolute;
   width: 100%;
@@ -422,7 +470,7 @@ border-radius: 16px;
 position: absolute;
 top: 3.2vh;
 right: 5%;
-  background-image: url(../img/ico_search21x212.png);
+  background-image: url(../img/icon-search.svg);
   background-size: cover;
   background-repeat: no-repeat;
   float: left;

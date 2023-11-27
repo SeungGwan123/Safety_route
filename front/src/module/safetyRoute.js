@@ -76,10 +76,7 @@ const safetyRoute = async (
       )} 분`
     );
 
-    if (count === 0) {
-      mapRef.current.setView([startLat, startLon], 15);
-      count += 1;
-    }
+    mapRef.current.setView([startLat, startLon], 15);
 
     info.style.visibility = "visible";
 

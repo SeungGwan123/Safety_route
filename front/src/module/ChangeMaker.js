@@ -2,43 +2,56 @@ import socketIOClient from "socket.io-client";
 import { Alert } from "./Alert";
 import axios from "axios";
 import { previousAlert } from "./previousAlert";
+import L from "leaflet";
 // Create a socket instance outside the function
 const socket = socketIOClient("http://localhost:5001");
 
 // Use a flag to track whether the socket connection has been set up
 let socketConnectionSetup = false;
-
 export const ChangeMarker = (
   cctvLocation,
   mapRef,
   cctv,
   regularMarker,
   alertRef,
-  redMarker,
+  redIcon,
   socketInstance // Pass the socket instance as an argument
 ) => {
-  redMarker.remove();
+  // redMarker.remove();
   const markers = [];
+  var targetLatLng = L.latLng(37.44692693, 126.693795);
+  function deleteMarker() {
+    if (regularMarker.getLatLng().equals(targetLatLng)) {
+      mapRef.current.removeLayer(regularMarker);
+    }
+  }
 
-  cctv.번호 = 8326;
   axios
     .get("http://127.0.0.1:5001/get_latest_warning")
     .then((response) => {
       const warningdata = response.data.data;
       const prevwarn = "위험";
+      const redMarker = L.marker([37.44692693, 126.693795], {
+        icon: redIcon,
+      });
+
       if (warningdata != null) {
+        // 기존 마커 배열 또는 객체에서 찾아서 삭제
+        if (redMarker) {
+          deleteMarker();
+        }
         const popupContent = `
         <div class="custom-popup">
-          <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
-          <p>WGS84 경도: ${cctv.WGS84경도}</p>
-          <p>WGS84 위도: ${cctv.WGS84위도}</p>
-          <p>관리기관명: ${cctv.관리기관명}</p>
-          <p>설치목적: ${cctv.설치목적}</p>
-          <p>설치연월: ${cctv.설치연월}</p>
-          <p>소재지 도로명주소: ${cctv.소재지도로명주소}</p>
+          <p class="popup-title">CCTV 번호: 2150</p>
+          <p>WGS84 경도: 126.693795</p>
+          <p>WGS84 위도: 37.44692693</p>
+          <p>관리기관명: 인천광역시 남동구청</p>
+          <p>설치목적: 생활방범</p>
+          <p>설치연월:  2018-06</p>
+          <p>소재지 도로명주소: 인천광역시 남동구 문화서로3번길 31</p>
           <p>촬영방면정보: ${cctv.촬영방면정보}</p>
           <p>카메라대수: ${cctv.카메라대수}</p>
-          <p>카메라화소: ${cctv.카메라화소}</p>
+          <p>카메라화소: 200</p>
           
         </div>
       `;
@@ -85,10 +98,13 @@ export const ChangeMarker = (
             console.log("Image Path:", imagePath);
 
             if (receivedWarning === "위험") {
-              if (markers.length > 0) {
-                mapRef.current.removeLayer(markers[0]);
+              const redMarker = L.marker(cctvLocation, {
+                icon: redIcon,
+              });
+              if (redMarker) {
+                deleteMarker();
               }
-              console.log(cctv.번호);
+              console.log(cctv);
               Alert(
                 cctvdata.data,
                 alertRef,
@@ -98,7 +114,7 @@ export const ChangeMarker = (
                 mapRef,
                 warningdata
               );
-              mapRef.current.removeLayer(regularMarker);
+
               const popupContent = `
               <div class="custom-popup">
                 <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
@@ -114,7 +130,6 @@ export const ChangeMarker = (
                 
               </div>
             `;
-
               redMarker.bindPopup(popupContent, {
                 maxWidth: 350,
                 className: "custom-popup",
@@ -122,18 +137,18 @@ export const ChangeMarker = (
               markers.push(redMarker);
 
               // Now, add the markers to the map
-              if (markers.length > 0) {
-                mapRef.current.addLayer(markers[0]);
-              }
+              markers.forEach((marker) => {
+                mapRef.current.addLayer(marker);
+              });
 
               return markers;
             } else {
               mapRef.current.removeLayer(redMarker);
               markers.push(regularMarker);
 
-              if (markers.length > 0) {
-                mapRef.current.addLayer(markers[0]);
-              }
+              markers.forEach((marker) => {
+                mapRef.current.addLayer(marker);
+              });
             }
           });
           // Set the flag to true to indicate that the socket connection has been set up
