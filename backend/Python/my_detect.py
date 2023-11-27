@@ -1,6 +1,6 @@
 # Safety_route\backend\Python > git clone https://github.com/ultralytics/yolov5.git
 # yolov5 폴더에 my_detect.py 포함시키기
-# Safety_route\backend\Python > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img
+# Safety_route\backend\Python > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img --conf-thres 0.75
 import requests
 import time
 main_flask_url = "http://127.0.0.1:5001/knife_detected"
