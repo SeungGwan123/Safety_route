@@ -242,17 +242,17 @@ def run(
             global signal_stack
             global last_detected_time
             detected_time = time.time()
-            if detected_time - last_detected_time < 1:  # 지난 칼 감지 후 1초 이내에 칼 감지가 됐다면
+            if detected_time - last_detected_time < 1:  # 지난 칼 감지 후 x초 이내에 칼 감지가 됐다면
                 signal_stack += 1
                 LOGGER.info('detected_time: ' + str(detected_time) + '\tsignal_stack: ' + str(signal_stack))
-                if signal_stack >= 10:  # 5번 이상 감지됐다면
+                if signal_stack >= 10:  # y번 이상 감지됐다면
                     t = str(int(detected_time))
                     detected_path = 'static/detected/' + t + '.jpg'
                     print(detected_path)
                     cv2.imwrite(detected_path, im0)
                     a = requests.get(main_flask_url, {'code': 1, 'detected_time': t})  # main flask로 신호 보냄
                     signal_stack = 0
-            else:  # 지난 칼 감지보다 1초가 지났다면
+            else:  # 지난 칼 감지보다 x초가 지났다면
                 signal_stack = 1
                 LOGGER.info('detected_time: ' + str(detected_time) + '\tsignal_stack: ' + str(signal_stack))
             last_detected_time = detected_time  # 지난 칼 감지 시간 업데이트
