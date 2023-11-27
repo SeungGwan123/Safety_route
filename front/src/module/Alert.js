@@ -1,5 +1,5 @@
 import L from "leaflet";
-import mp3 from "../components/audio/99AB9F405F75661818.mp3";
+import mp3 from "../components/audio/99E208335F721D5B0B.mp3";
 
 const MAX_ARRAY_LENGTH = 5;
 const imagePathArray = [];
@@ -22,7 +22,8 @@ export const Alert = (
     console.error("Alert component is not mounted");
     return;
   }
-
+  alertRef.current.innerHTML = `CCTV 번호: ${cctvdata}`;
+  alertRef.current.classList.add("show");
   const audio = new Audio(mp3);
   audio.play();
   setTimeout(() => {

@@ -119,12 +119,15 @@ function CCTV() {
 
             const popupContent = `
             <b class="popup-title">번호: ${cctv.id}</b><br>
-            <b>위치:</b> ${cctv.Area}<br>
-            <b>전화번호:</b> ${cctv.call}<br>
-            <b>설치일자:</b> ${cctv.install_date}<br>
-            <b>상세위치:</b> ${cctv.new_address}<br>
-            <b>설치이유:</b> ${cctv.purpose}<br>
-            <b>최근 업데이트:</b> ${cctv.recent_update}<br>
+            <b>WGS84 경도:</b> ${cctv.equator}<br>
+            <b>WGS84 위도:</b> ${cctv.latitude}<br>
+            <b>관리기관명:</b> ${cctv.Area}<br>
+            <b>설치목적:</b> ${cctv.purpose}<br>
+            <b>설치연월:</b> ${cctv.install_date}<br>
+            <b>소재지도로명주소:</b> ${cctv.old_address}<br>
+            <b>촬영방면정보:</b> ${cctv.recode_side}<br>
+            <b>카메라대수:</b> ${cctv.number}<br>
+            <b>카메라화소:</b> ${cctv.pixel}<br>
           `;
 
             marker.bindPopup(popupContent, {
