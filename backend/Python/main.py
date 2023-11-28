@@ -1,7 +1,7 @@
 # practice/test.ipynb 먼저 확인
 # > myenv\Scripts\activate
 # > python main.py
-# > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img
+# Safety_route\backend\Python > python yolov5/my_detect.py --weights best5.pt --source "http://raspberrypi:8000/stream.mjpg" --device cpu --view-img --conf-thres 0.75
 
 # 인천대-> CGV
 # http://127.0.0.1:5001/find_safe_route?depart_x=126.63486&depart_y=37.37692&arrive_x=126.64251&arrive_y=37.38308
@@ -98,8 +98,9 @@ def find_safe_route():
 @app.route('/knife_detected', methods=['GET'])
 def knife_detected():
     global detected_time, detected_cctv, detected_image_path
-    detected_time = int(request.args.get('detected_time'))   # 카메라 없을 시 detected_time = time.time()
-    detected_cctv = 8326
+    detected_time = int(request.args.get('detected_time'))   # 카메라 없을 시
+    #detected_time = time.time()
+    detected_cctv = 2150
     detected_image_path = "http://localhost:5001/static/detected/"+str(detected_time)+".jpg"
     send_signal(detected_time, detected_cctv, detected_image_path)
     return 'knife_detected at ' + str(detected_time) + " " + str(detected_cctv) + " " + detected_image_path
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     db_connection = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root",
+        password="tmdrhks123",
         database="safety_route"
     )
     cursor = db_connection.cursor()
