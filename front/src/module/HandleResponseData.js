@@ -11,9 +11,9 @@ export const handleResponseData = (
     icon: cctvIcon,
   }).addTo(mapRef.current);
   const redIcon = new L.Icon({
-    iconUrl: require("../components/img/redcctv.png"), // URL for your custom red marker icon
+    iconUrl: require("../components/img/redcctv.png"),
     iconSize: [20, 24],
-    iconAnchor: [10, 12], // Adjust the anchor point if necessary
+    iconAnchor: [10, 12],
   });
 
   const markers = [];
@@ -33,10 +33,9 @@ export const handleResponseData = (
         </div>
       `;
 
-  // Add the custom popup to the marker
   regularMarker.bindPopup(popupContent, {
-    minWidth: 350, // Set a minimum width for the popup
-    className: "custom-popup", // Add a custom CSS class to style the popup
+    minWidth: 350,
+    className: "custom-popup",
   });
   markers.push(regularMarker);
 
@@ -47,5 +46,5 @@ export const handleResponseData = (
 
   ChangeMarker(cctvLocation, mapRef, cctv, regularMarker, alertRef, redIcon);
 
-  return markers; // Return the marker objects if needed
+  return markers;
 };

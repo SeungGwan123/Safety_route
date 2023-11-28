@@ -251,19 +251,26 @@ border-radius: 16px;
 
 }
 
-.logo{
+.logo {
   position: relative;
   top: 3%;
+  left: 7px;
   font-family: 'Playpen Sans', cursive;
-  color: #ff7f00;
+  color: #3498db; /* 변경된 색상 */
   display: flex;
-  width: 130px;
+  width: 100px; /* 크기 조정 */
   justify-content: center;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.525rem; /* 크기 조정 */
   font-weight: bold;
-
+  text-transform: uppercase; /* 대문자로 변환 */
+  letter-spacing: 2px; /* 글자 간격 조정 */
+  border: 2px solid #3498db; /* 테두리 추가 */
+  border-radius: 10px; /* 테두리 모서리 둥글게 만듦 */
+  background-color: #fff; /* 배경색 추가 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
 }
+
 .menu-button {
   position: relative;
   width: 20%; /* Adjust width as needed */
@@ -386,7 +393,7 @@ border-radius: 16px;
 
 .pd{
   position: absolute;
-  bottom: 45px;
+  bottom: 6.5vh;
   width: 50px;
   left: 0;
 }
@@ -581,4 +588,681 @@ right: 5%;
   font-family: Arial, sans-serif;
 }
 
+
+  @media only screen and (max-width: 450px) {
+    .menu {
+      position: fixed;
+      border-bottom: none;
+      display: flex;
+      left: 10%;
+      width: 350px;
+      height: 1vh;
+      overflow-y: hidden;
+      height: 12.5vh;
+      z-index: 9999;
+      justify-content: center;
+      top: 2vh;
+      background: #ffffff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+    }
+    .input-address{
+      position: absolute;
+      left: 11%;
+      width: 340px;
+      height: 46px;
+      border-radius: 3px;
+      background-color: #fff;
+      outline: none; /* Remove the outline */
+      top: 2vh;
+      /* Rectangle 51 */
+    
+    box-sizing: border-box;
+    
+    
+    
+    background: #FFFFFF;
+    /* main color */
+    border: 2px solid #AAB3FF;
+    box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+    border-radius: 16px;
+    
+  }
+  .weather {
+    position: fixed;
+    display: flex;
+    top: 15%;
+    left: 10%;
+    width: 348px;
+    height: 5%;
+    z-index: 999999;
+    border: 1px solid #258fff;
+    background-color: #fff; /* Add a white background color */
+    color: #333; /* Darken the text color */
+    font-size: 0.25em; /* Increase the font size for better readability */
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add rounded corners */
+  }
+  .nav-direction {
+    position: fixed;
+    top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 15vh;
+    background: #ffffff;
+    border: 1px solid #AAB3FF;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  }
+  .start{
+    position: absolute;
+    top: 62.5px;
+    width: 232px;
+    height: 10%;
+    z-index: 99999999;
+    left:55px;
+    border: 1px solid #72cc82;
+    border-radius: 2px;
+  
+  }
+  .end{
+    position: absolute;
+    width: 232px;
+    top: 85px;
+    left: 55px;
+    height: 10%;
+    border: 1px solid #FFB3B3;
+    ;
+    border-radius: 2px;
+  }
+  .route-button {
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 25px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Rectangle 53 */
+  
+  /* snb color 2 */
+  background: #fcb0b0;
+  border-radius: 16px;
+  
+  }
+  .info-cont {
+    position: absolute;
+    top: 101%;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: transparent;
+    border: 1px solid #a0afbf; /* Increase border width and change color */
+    border-radius: 10px; /* Increase border radius for a rounded look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    visibility: hidden;
+   /* Add more padding for better spacing */
+  }
+  .routeWalk{
+    position: absolute;
+   display: none;
+  }
+
+  }
+  @media only screen and (max-width: 420px) {
+    .menu {
+      position: fixed;
+      border-bottom: none;
+      display: flex;
+      left: 8.5%;
+      width: 350px;
+      height: 1vh;
+      overflow-y: hidden;
+      height: 12.5vh;
+      z-index: 9999;
+      justify-content: center;
+      top: 2vh;
+      background: #ffffff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+    }
+    .input-address{
+      position: absolute;
+      left: 9%;
+      width: 340px;
+      height: 46px;
+      border-radius: 3px;
+      background-color: #fff;
+      outline: none; /* Remove the outline */
+      top: 2vh;
+      /* Rectangle 51 */
+    
+    box-sizing: border-box;
+    
+    
+    
+    background: #FFFFFF;
+    /* main color */
+    border: 2px solid #AAB3FF;
+    box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+    border-radius: 16px;
+    
+  }
+  .weather {
+    position: fixed;
+    display: flex;
+    top: 15%;
+    left: 9%;
+    width: 348px;
+    height: 5%;
+    z-index: 999999;
+    border: 1px solid #258fff;
+    background-color: #fff; /* Add a white background color */
+    color: #333; /* Darken the text color */
+    font-size: 0.25em; /* Increase the font size for better readability */
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add rounded corners */
+  }
+  .nav-direction {
+    position: fixed;
+    top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 15vh;
+    background: #ffffff;
+    border: 1px solid #AAB3FF;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  }
+  .start{
+    position: absolute;
+    top: 62.5px;
+    width: 232px;
+    height: 10%;
+    z-index: 99999999;
+    left:55px;
+    border: 1px solid #72cc82;
+    border-radius: 2px;
+  
+  }
+  .end{
+    position: absolute;
+    width: 232px;
+    top: 85px;
+    left: 55px;
+    height: 10%;
+    border: 1px solid #FFB3B3;
+    ;
+    border-radius: 2px;
+  }
+  .route-button {
+    position: absolute;
+    top: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 25px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Rectangle 53 */
+  
+  /* snb color 2 */
+  background: #fcb0b0;
+  border-radius: 16px;
+  
+  }
+  .info-cont {
+    position: absolute;
+    top: 101%;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: transparent;
+    border: 1px solid #a0afbf; /* Increase border width and change color */
+    border-radius: 10px; /* Increase border radius for a rounded look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    visibility: hidden;
+   /* Add more padding for better spacing */
+  }
+  .routeWalk{
+    position: absolute;
+   display: none;
+  }
+
+  }
+  @media only screen and (max-width: 390px) {
+    .menu {
+      position: fixed;
+      border-bottom: none;
+      display: flex;
+      left: 5%;
+      width: 350px;
+      height: 1vh;
+      overflow-y: hidden;
+      height: 12.5vh;
+      z-index: 9999;
+      justify-content: center;
+      top: 2vh;
+      background: #ffffff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+    }
+    .input-address{
+      position: absolute;
+      left: 4.5%;
+      width: 340px;
+      height: 46px;
+      border-radius: 3px;
+      background-color: #fff;
+      outline: none; /* Remove the outline */
+      top: 2vh;
+      /* Rectangle 51 */
+    
+    box-sizing: border-box;
+    
+    
+    
+    background: #FFFFFF;
+    /* main color */
+    border: 2px solid #AAB3FF;
+    box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+    border-radius: 16px;
+    
+  }
+  .weather {
+    position: fixed;
+    display: flex;
+    top: 15%;
+    left: 4.5%;
+    width: 348px;
+    height: 5%;
+    z-index: 999999;
+    border: 1px solid #258fff;
+    background-color: #fff; /* Add a white background color */
+    color: #333; /* Darken the text color */
+    font-size: 0.25em; /* Increase the font size for better readability */
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add rounded corners */
+  }
+  .nav-direction {
+    position: fixed;
+    top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 15vh;
+    background: #ffffff;
+    border: 1px solid #AAB3FF;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  }
+  .start{
+    position: absolute;
+    top: 62.5px;
+    width: 232px;
+    height: 10%;
+    z-index: 99999999;
+    left:55px;
+    border: 1px solid #72cc82;
+    border-radius: 2px;
+  
+  }
+  .end{
+    position: absolute;
+    width: 232px;
+    top: 85px;
+    left: 55px;
+    height: 10%;
+    border: 1px solid #FFB3B3;
+    ;
+    border-radius: 2px;
+  }
+  .route-button {
+    position: absolute;
+    top: 103px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: ₩px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Rectangle 53 */
+  
+  /* snb color 2 */
+  background: #fcb0b0;
+  border-radius: 16px;
+  
+  }
+  .info-cont {
+    position: absolute;
+    top: 101%;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: transparent;
+    border: 1px solid #a0afbf; /* Increase border width and change color */
+    border-radius: 10px; /* Increase border radius for a rounded look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    visibility: hidden;
+   /* Add more padding for better spacing */
+  }
+  .routeWalk{
+    position: absolute;
+   display: none;
+  }
+
+  }
+  @media only screen and (max-width: 375px) {
+    .menu {
+      position: fixed;
+      border-bottom: none;
+      display: flex;
+      left: 3.5%;
+      width: 350px;
+      height: 1vh;
+      overflow-y: hidden;
+      height: 12.5vh;
+      z-index: 9999;
+      justify-content: center;
+      top: 2vh;
+      background: #ffffff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+    }
+    .input-address{
+      position: absolute;
+      left: 3%;
+      width: 340px;
+      height: 46px;
+      border-radius: 3px;
+      background-color: #fff;
+      outline: none; /* Remove the outline */
+      top: 2vh;
+      /* Rectangle 51 */
+    
+    box-sizing: border-box;
+    
+    
+    
+    background: #FFFFFF;
+    /* main color */
+    border: 2px solid #AAB3FF;
+    box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+    border-radius: 16px;
+    
+  }
+  .weather {
+    position: fixed;
+    display: flex;
+    top: 15%;
+    left: 3%;
+    width: 348px;
+    height: 5%;
+    z-index: 999999;
+    border: 1px solid #258fff;
+    background-color: #fff; /* Add a white background color */
+    color: #333; /* Darken the text color */
+    font-size: 0.25em; /* Increase the font size for better readability */
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add rounded corners */
+  }
+  .nav-direction {
+    position: fixed;
+    top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 15vh;
+    background: #ffffff;
+    border: 1px solid #AAB3FF;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  }
+  .start{
+    position: absolute;
+    top: 62.5px;
+    width: 232px;
+    height: 10%;
+    z-index: 99999999;
+    left:10px;
+    border: 1px solid #72cc82;
+    border-radius: 2px;
+  
+  }
+  .end{
+    position: absolute;
+    width: 232px;
+    top: 80px;
+    left: 10px;
+    height: 10%;
+    border: 1px solid #FFB3B3;
+    ;
+    border-radius: 2px;
+  }
+  .route-button {
+    position: absolute;
+    top: 70px;
+    left: 85%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 20px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Rectangle 53 */
+  
+  /* snb color 2 */
+  background: #fcb0b0;
+  border-radius: 16px;
+  
+  }
+  .info-cont {
+    position: absolute;
+    top: 101%;
+    left: 0;
+    width: 100%;
+    height: 12.5vh;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: transparent;
+    border: 1px solid #a0afbf; /* Increase border width and change color */
+    border-radius: 10px; /* Increase border radius for a rounded look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    visibility: hidden;
+   /* Add more padding for better spacing */
+  }
+  .routeWalk{
+    position: absolute;
+   display: none;
+  }
+
+  }
+  
+  @media only screen and (max-width: 360px) {
+    .menu {
+      position: fixed;
+      border-bottom: none;
+      display: flex;
+      left: 1.5%;
+      width: 350px;
+      height: 1vh;
+      overflow-y: hidden;
+      height: 12.5vh;
+      z-index: 9999;
+      justify-content: center;
+      top: 2vh;
+      background: #ffffff;
+      border-radius: 2px;
+      -webkit-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      -moz-box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+      box-shadow: 0 2px 1px 0 rgba(0,0,0,.15);
+    }
+    .input-address{
+      position: absolute;
+      left: 1.5%;
+      width: 340px;
+      height: 46px;
+      border-radius: 3px;
+      background-color: #fff;
+      outline: none; /* Remove the outline */
+      top: 2vh;
+      /* Rectangle 51 */
+    
+    box-sizing: border-box;
+    
+    
+    
+    background: #FFFFFF;
+    /* main color */
+    border: 2px solid #AAB3FF;
+    box-shadow: 0px 0px 10px rgba(170, 179, 255, 0.4);
+    border-radius: 16px;
+    
+  }
+  .weather {
+    position: fixed;
+    display: flex;
+    top: 15%;
+    left: 1.5%;
+    width: 348px;
+    height: 5%;
+    z-index: 999999;
+    border: 1px solid #258fff;
+    background-color: #fff; /* Add a white background color */
+    color: #333; /* Darken the text color */
+    font-size: 0.25em; /* Increase the font size for better readability */
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    border-radius: 10px; /* Add rounded corners */
+  }
+  .nav-direction {
+    position: fixed;
+    top: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 15vh;
+    background: #ffffff;
+    border: 1px solid #AAB3FF;
+    border-radius: 8px; /* Increased border-radius for a smoother look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Added box shadow for depth */
+  }
+  .start{
+    position: absolute;
+    top: 62.5px;
+    width: 232px;
+    height: 10%;
+    z-index: 99999999;
+    left:10px;
+    border: 1px solid #72cc82;
+    border-radius: 2px;
+  
+  }
+  .end{
+    position: absolute;
+    width: 232px;
+    top: 85px;
+    left: 10px;
+    height: 10%;
+    border: 1px solid #FFB3B3;
+    ;
+    border-radius: 2px;
+  }
+  .route-button {
+    position: absolute;
+    top: 70px;
+    left: 85%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 20px;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    /* Rectangle 53 */
+  
+  /* snb color 2 */
+  background: #fcb0b0;
+  border-radius: 16px;
+  
+  }
+  .info-cont {
+    position: absolute;
+    top: 101%;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    background: rgba(255, 255, 255, 0.9);
+    border-top: transparent;
+    border: 1px solid #a0afbf; /* Increase border width and change color */
+    border-radius: 10px; /* Increase border radius for a rounded look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Enhance box shadow for depth */
+    display: flex;
+    justify-content: center;
+    text-align: left;
+    visibility: hidden;
+   /* Add more padding for better spacing */
+  }
+  .routeWalk{
+    position: absolute;
+   display: none;
+  }
+
+  }
 

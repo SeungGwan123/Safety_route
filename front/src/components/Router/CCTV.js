@@ -118,16 +118,16 @@ function CCTV() {
             }).addTo(mapRef.current);
 
             const popupContent = `
-            <b class="popup-title">번호: ${cctv.id}</b><br>
-            <b>WGS84 경도:</b> ${cctv.equator}<br>
-            <b>WGS84 위도:</b> ${cctv.latitude}<br>
-            <b>관리기관명:</b> ${cctv.Area}<br>
-            <b>설치목적:</b> ${cctv.purpose}<br>
-            <b>설치연월:</b> ${cctv.install_date}<br>
-            <b>소재지도로명주소:</b> ${cctv.old_address}<br>
-            <b>촬영방면정보:</b> ${cctv.recode_side}<br>
-            <b>카메라대수:</b> ${cctv.number}<br>
-            <b>카메라화소:</b> ${cctv.pixel}<br>
+            <p class="popup-title">번호: ${cctv.id}<br>
+            <p>WGS84 경도:</b> ${cctv.equator}<br>
+            <p>WGS84 위도:</b> ${cctv.latitude}<br>
+            <p>관리기관명:</b> ${cctv.Area}<br>
+            <p>설치목적:</b> ${cctv.purpose}<br>
+            <p>설치연월:</b> ${cctv.install_date}<br>
+            <p>소재지도로명주소:</b> ${cctv.old_address}<br>
+            <p>촬영방면정보:</b> ${cctv.recode_side}<br>
+            <p>카메라대수:</b> ${cctv.number}<br>
+            <p>카메라화소:</b> ${cctv.pixel}<br>
           `;
 
             marker.bindPopup(popupContent, {

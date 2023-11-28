@@ -3,10 +3,10 @@ import { Alert } from "./Alert";
 import axios from "axios";
 import { previousAlert } from "./previousAlert";
 import L from "leaflet";
-// Create a socket instance outside the function
+
 const socket = socketIOClient("http://localhost:5001");
 
-// Use a flag to track whether the socket connection has been set up
+// 소켓이 사용여부를 확인 하기 위해 플래그 사용
 let socketConnectionSetup = false;
 export const ChangeMarker = (
   cctvLocation,
@@ -14,10 +14,8 @@ export const ChangeMarker = (
   cctv,
   regularMarker,
   alertRef,
-  redIcon,
-  socketInstance // Pass the socket instance as an argument
+  redIcon
 ) => {
-  // redMarker.remove();
   const markers = [];
   var targetLatLng = L.latLng(37.44692693, 126.693795);
   function deleteMarker() {
@@ -69,20 +67,20 @@ export const ChangeMarker = (
         });
         markers.push(redMarker);
 
-        // Now, add the markers to the map
+        // 지도에 마커를 추가
         if (markers.length > 0) {
           mapRef.current.addLayer(markers[0]);
         }
       }
       console.log();
       const setupSocketConnection = () => {
-        // Check if the socket connection has already been set up
+        // 소켓이 이미 사용중이면
         if (socketConnectionSetup) {
           console.log("Socket connection has already been set up.");
           return;
         }
 
-        // Check if socketInstance is defined before using it
+        //소켓이 이미 사용중인 체크
         if (socket && typeof socket.on === "function") {
           socket.on("connect", () => {
             console.log("Connected to server");
@@ -136,7 +134,6 @@ export const ChangeMarker = (
               });
               markers.push(redMarker);
 
-              // Now, add the markers to the map
               markers.forEach((marker) => {
                 mapRef.current.addLayer(marker);
               });
@@ -151,7 +148,7 @@ export const ChangeMarker = (
               });
             }
           });
-          // Set the flag to true to indicate that the socket connection has been set up
+          //소켓이 이미 연결되어 있다면
           socketConnectionSetup = true;
         } else {
           console.error("Socket instance is not valid.");
@@ -160,7 +157,7 @@ export const ChangeMarker = (
         return socket;
       };
 
-      // Call setupSocketConnection only once
+      //호출을 한번만 한다.
       setupSocketConnection();
     })
     .catch((error) => {

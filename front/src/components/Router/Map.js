@@ -20,6 +20,7 @@ function Map({
   decode,
   cctvCircles,
   osrmPolylines,
+  address,
 }) {
   const customIcon = new L.Icon({
     iconUrl: require("../img/search.png"),
@@ -44,8 +45,16 @@ function Map({
         url="http://xdworld.vworld.kr:8080/2d/Base/202002/{z}/{x}/{y}.png"
       />
       <Marker position={markerPosition} icon={customIcon}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
+        <Popup className="custom-popup">
+          <div>
+            {address && (
+              <div>
+                <h2>{address}</h2>
+                <p>위도: {markerPosition[0]}</p>
+                <p>경도: {markerPosition[1]}</p>
+              </div>
+            )}
+          </div>
         </Popup>
       </Marker>
       {osrmPolylines &&
@@ -57,7 +66,7 @@ function Map({
             weight={6}
           />
         ))}
-      {cctvCircles} {/* Render the circles */}
+      {cctvCircles}
     </MapContainer>
   );
 }

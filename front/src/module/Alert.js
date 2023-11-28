@@ -79,7 +79,7 @@ export const Alert = (
 
   setTimeout(() => {
     alertRef.current.classList.remove("show");
-  }, 500);
+  }, 2000);
 
   redMarker.on("popupopen", function () {
     updatePopup();

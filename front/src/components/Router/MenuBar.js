@@ -3,19 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import routeImage from "../img/route.svg";
 import homeImage from "../img/home.svg";
 import cctvImage from "../img/cctv.svg";
-/* Rectangle 75 */
-
-// position: absolute;
-// width: 160px;
-// height: 45px;
-// left: 658px;
-// top: 550px;
-
-// /* main color */
-// background: #AAB3FF;
-// box-shadow: 1px 2px 4px rgba(82, 91, 159, 0.2);
-// border-radius: 30px;
-
 const menuItems = [
   {
     path: "/",
@@ -43,7 +30,6 @@ const MenuBar = () => {
 
   const handleButtonClick = (path) => {
     setActiveLink(path);
-    // Check if the path is "/direction" before reloading
     if (path === "/direction") {
       navigate("/direction");
       window.location.reload();

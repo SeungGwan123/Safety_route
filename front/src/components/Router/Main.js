@@ -57,7 +57,7 @@ function Main() {
   return (
     <div className="main">
       <Weather weatherData={weatherData} />
-      <Map markerPosition={markerPosition} mapRef={mapRef} />
+      <Map markerPosition={markerPosition} mapRef={mapRef} address={address} />
       <Nav
         handleAddressChange={(newAddress) =>
           handleAddressChange(

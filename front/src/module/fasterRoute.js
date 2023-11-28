@@ -23,10 +23,10 @@ const fasterRoute = ({
     iconSize: [30, 35],
     iconAnchor: [12, 24],
   });
-  setOsrmPolylines([routes[0].geometry]); // Display the route without CCTV
+  setOsrmPolylines([routes[0].geometry]); //도보경로 뛰우기
   mapRef.current.setView([startLat, startLon], 15);
-  setCCTVCircles([]); // Remove CCTV markers
-  const distanceInKilometers = (routes[0].distance / 1000).toFixed(2); // Format distance with two decimal places
+  setCCTVCircles([]); //cctv 마커 삭제
+  const distanceInKilometers = (routes[0].distance / 1000).toFixed(2);
   const durationInSeconds = routes[0].duration;
   const hours = Math.floor(durationInSeconds / 3600); // 초를 시간으로 변환
   const minutes = Math.floor((durationInSeconds % 3600) / 60);
