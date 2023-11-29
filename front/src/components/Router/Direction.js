@@ -44,6 +44,14 @@ function Direction() {
       }
     );
   }, []);
+  useEffect(() => {
+    // 인천을 미리 입력값으로 설정
+    setStartLocationQuery("인천");
+  }, []);
+  useEffect(() => {
+    // 인하대를 미리 입력값으로 설정
+    setEndLocationQuery("인하대");
+  }, []);
 
   const mapRef = useRef();
 

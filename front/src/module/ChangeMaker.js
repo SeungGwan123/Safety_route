@@ -19,101 +19,72 @@ export const ChangeMarker = (
   const markers = [];
   var targetLatLng = L.latLng(37.44692693, 126.693795);
   function deleteMarker() {
-    if (regularMarker.getLatLng().equals(targetLatLng)) {
-      mapRef.current.removeLayer(regularMarker);
+    if (regularMarker && mapRef && mapRef.current) {
+      if (
+        regularMarker.getLatLng &&
+        typeof regularMarker.getLatLng === "function"
+      ) {
+        if (regularMarker.getLatLng().equals(targetLatLng)) {
+          if (
+            mapRef.current.removeLayer &&
+            typeof mapRef.current.removeLayer === "function"
+          ) {
+            mapRef.current.removeLayer(regularMarker);
+          } else {
+            console.error("mapRef.current does not have a removeLayer method");
+          }
+        }
+      } else {
+        console.error("regularMarker does not have a getLatLng method");
+      }
+    } else {
+      console.error("regularMarker or mapRef.current is null or undefined");
     }
   }
+  const redMarker = L.marker([37.44692693, 126.693795], {
+    icon: redIcon,
+  });
 
-  axios
-    .get("http://127.0.0.1:5001/get_latest_warning")
-    .then((response) => {
-      const warningdata = response.data.data;
-      const prevwarn = "위험";
-      const redMarker = L.marker([37.44692693, 126.693795], {
-        icon: redIcon,
+  const setupSocketConnection = () => {
+    // 소켓이 이미 사용중이면
+    if (socketConnectionSetup) {
+      console.log("Socket connection has already been set up.");
+      return;
+    }
+
+    //소켓이 이미 사용중인 체크
+    if (socket && typeof socket.on === "function") {
+      socket.on("connect", () => {
+        console.log("Connected to server");
       });
 
-      if (warningdata != null) {
-        // 기존 마커 배열 또는 객체에서 찾아서 삭제
-        if (redMarker) {
-          deleteMarker();
-        }
-        const popupContent = `
-        <div class="custom-popup">
-          <p class="popup-title">CCTV 번호: 2150</p>
-          <p>WGS84 경도: 126.693795</p>
-          <p>WGS84 위도: 37.44692693</p>
-          <p>관리기관명: 인천광역시 남동구청</p>
-          <p>설치목적: 생활방범</p>
-          <p>설치연월:  2018-06</p>
-          <p>소재지 도로명주소: 인천광역시 남동구 문화서로3번길 31</p>
-          <p>촬영방면정보: ${cctv.촬영방면정보}</p>
-          <p>카메라대수: ${cctv.카메라대수}</p>
-          <p>카메라화소: 200</p>
-          
-        </div>
-      `;
-        previousAlert(
-          warningdata.latest_warning[1],
-          redMarker,
-          mapRef,
-          warningdata.latest_warning[2],
-          prevwarn
-        );
+      socket.on("signal", (data) => {
+        const cctvdata = data.data;
+        const receivedWarning = cctvdata.warning;
+        const imagePath = cctvdata.image;
 
-        redMarker.bindPopup(popupContent, {
-          maxWidth: 350,
-          className: "custom-popup",
-        });
-        markers.push(redMarker);
+        console.log("Received Data:", cctvdata);
+        console.log("Received Warning:", receivedWarning);
+        console.log("Image Path:", imagePath);
 
-        // 지도에 마커를 추가
-        if (markers.length > 0) {
-          mapRef.current.addLayer(markers[0]);
-        }
-      }
-      console.log();
-      const setupSocketConnection = () => {
-        // 소켓이 이미 사용중이면
-        if (socketConnectionSetup) {
-          console.log("Socket connection has already been set up.");
-          return;
-        }
-
-        //소켓이 이미 사용중인 체크
-        if (socket && typeof socket.on === "function") {
-          socket.on("connect", () => {
-            console.log("Connected to server");
+        if (receivedWarning === "위험") {
+          const redMarker = L.marker(cctvLocation, {
+            icon: redIcon,
           });
+          if (redMarker) {
+            deleteMarker();
+          }
+          console.log(cctv);
+          Alert(
+            cctvdata.data,
+            alertRef,
+            imagePath,
+            receivedWarning,
+            redMarker,
+            mapRef
+          );
 
-          socket.on("signal", (data) => {
-            const cctvdata = data.data;
-            const receivedWarning = cctvdata.warning;
-            const imagePath = cctvdata.image;
-
-            console.log("Received Data:", cctvdata);
-            console.log("Received Warning:", receivedWarning);
-            console.log("Image Path:", imagePath);
-
-            if (receivedWarning === "위험") {
-              const redMarker = L.marker(cctvLocation, {
-                icon: redIcon,
-              });
-              if (redMarker) {
-                deleteMarker();
-              }
-              console.log(cctv);
-              Alert(
-                cctvdata.data,
-                alertRef,
-                imagePath,
-                receivedWarning,
-                redMarker,
-                mapRef,
-                warningdata
-              );
-
-              const popupContent = `
+          const popupContent = `
               <div class="custom-popup">
                 <p class="popup-title">CCTV 번호: ${cctv.번호}</p>
                 <p>WGS84 경도: ${cctv.WGS84경도}</p>
@@ -128,39 +99,42 @@ export const ChangeMarker = (
                 
               </div>
             `;
-              redMarker.bindPopup(popupContent, {
-                maxWidth: 350,
-                className: "custom-popup",
-              });
-              markers.push(redMarker);
-
-              markers.forEach((marker) => {
-                mapRef.current.addLayer(marker);
-              });
-
-              return markers;
-            } else {
-              mapRef.current.removeLayer(redMarker);
-              markers.push(regularMarker);
-
-              markers.forEach((marker) => {
-                mapRef.current.addLayer(marker);
-              });
-            }
+          redMarker.bindPopup(popupContent, {
+            maxWidth: 350,
+            className: "custom-popup",
           });
-          //소켓이 이미 연결되어 있다면
-          socketConnectionSetup = true;
+          markers.push(redMarker);
+
+          if (markers && Array.isArray(markers)) {
+            markers.forEach((marker) => {
+              if (mapRef && mapRef.current) {
+                mapRef.current.addLayer(marker);
+              } else {
+                console.error("mapRef is null or not initialized");
+              }
+            });
+          } else {
+            console.error("markers is null or not an array");
+          }
+          return markers;
         } else {
-          console.error("Socket instance is not valid.");
+          mapRef.current.removeLayer(redMarker);
+          markers.push(regularMarker);
+
+          markers.forEach((marker) => {
+            mapRef.current.addLayer(marker);
+          });
         }
+      });
+      //소켓이 이미 연결되어 있다면
+      socketConnectionSetup = true;
+    } else {
+      console.error("Socket instance is not valid.");
+    }
 
-        return socket;
-      };
+    return socket;
+  };
 
-      //호출을 한번만 한다.
-      setupSocketConnection();
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+  //호출을 한번만 한다.
+  setupSocketConnection();
 };
