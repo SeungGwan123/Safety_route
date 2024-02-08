@@ -1,5 +1,5 @@
 # Safety_route
-
+Notion: https://intelligent-sorrel-3fb.notion.site/6935fe98cfec44a8b4680c29d15f398d
 # Commit message
 
 <li>feat	새로운 기능 추가</li>
