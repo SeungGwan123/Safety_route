@@ -26,7 +26,6 @@ public class CCTVserviceImpl implements CCTVservice {
         uri+=(Double.toString(ste.getEnd_x())+",");
         uri+=(Double.toString(ste.getEnd_y()));
         uri+=uri_End;
-        log.error(uri);
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
 
