@@ -21,14 +21,14 @@ import java.util.List;
 public class CCTVcontroller {
     private final CCTVservice cctvService;
 
-    @PostMapping("/Safety_route/walking")
+    @GetMapping("/Safety_route/walking")
     public ResponseEntity<?> walkingRoute(@RequestBody startToEnd ste) {
         System.out.println("Received walkingRoute request with data: " + ste);
         String result = cctvService.walkingUrl(ste);
         return new ResponseEntity<>(new respDto<>(1,result), HttpStatus.OK);
     }
 
-    @PostMapping("/Safety_route/CCTV/searching")
+    @GetMapping("/Safety_route/CCTV/searching")
     public ResponseEntity<?> cctvCount(@RequestBody currentLocation cl) {
         List<CCTV> result = cctvService.searchCctv(cl);
         return new ResponseEntity<>(new respDto<>(1,result), HttpStatus.OK);
